@@ -1,0 +1,88 @@
+name: kai_chat
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+  flutter: '3.16.6'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+   # Declare env file
+  flutter_dotenv: ^5.1.0
+  
+  # Display svg
+  flutter_svg: ^2.0.3
+
+  # Store sensitive data
+  flutter_secure_storage: ^8.0.0
+  shared_preferences: ^2.0.18
+
+  # State management
+  get: ^4.6.6
+
+  # Calling API
+  dio: ^5.4.0
+
+  # Lottie
+  lottie: ^2.4.0
+
+  # Check internet connection
+  internet_connection_checker: ^1.0.0+1
+
+  # Request headers
+  ua_client_hints: ^1.2.2
+
+  # Logger
+  logger: ^2.0.1
+
+  # Sentry
+  sentry_flutter: ^7.12.0
+
+  # Loading Animation
+  loading_animation_widget: ^1.2.0+4
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  #Change application identifier in a very easy way
+  #flutter pub run change_app_package_name:main your.package.name
+  change_app_package_name: ^1.1.0
+
+  # flutter pub run flutter_launcher_icons
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/png/app_logo1024.png"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/fonts/
+    - assets/lottie/
+    - assets/images/png/
+    - assets/images/svg/
+    - .env.uat
+    - .env.dev
+    - .env.prod
+  fonts:
+    - family: DMSans
+      fonts:
+        - asset: assets/fonts/DMSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/DMSans-Bold.ttf
+          weight: 700
