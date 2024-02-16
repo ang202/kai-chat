@@ -7,6 +7,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 - [Flutter SDK](https://flutter.dev/docs/get-started/install)
 - [Android Studio](https://developer.android.com/studio) or [Visual Studio Code](https://code.visualstudio.com/) with Flutter extensions installed
+- [OpenAI Key](https://platform.openai.com/api-keys)
 ### Installing
 1. Clone the repository to your local machine using Git or download the ZIP file.
 2. Open the project in your preferred IDE.
