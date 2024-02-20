@@ -22,6 +22,13 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+// Check for keystore.properties file and load it
+def keystoreProperties = new Properties()
+   def keystorePropertiesFile = rootProject.file('key.properties')
+   if (keystorePropertiesFile.exists()) {
+       keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace "com.kai.chat"
     compileSdkVersion flutter.compileSdkVersion
@@ -77,13 +84,20 @@ android {
         versionName flutterVersionName
     }
 
+    signingConfigs {
+       release {
+           keyAlias keystoreProperties['keyAlias']
+           keyPassword keystoreProperties['keyPassword']
+           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+           storePassword keystoreProperties['storePassword']
+       }
+   }
+
     buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
-        }
-    }
+       release {
+           signingConfig signingConfigs.release
+       }
+   }
 }
 
 flutter {

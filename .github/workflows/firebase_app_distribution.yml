@@ -1,0 +1,41 @@
+name: Deploy to Firebase App Distribution
+
+on:
+  push:
+    branches:
+      - setup-cicd
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.16.6'
+
+    - name: Install Fastlane
+      run: |
+        sudo gem install fastlane -NV
+
+    - name: Set up Fastlane
+      run: |
+        bundle install
+
+    - name: Create env file
+      run: |
+          rm -f android/fastlane/firebase_login_key.json
+          touch android/fastlane/firebase_login_key.json
+          echo "${{ secrets.firebase_login_key }}" >> android/fastlane/firebase_login_key.json
+
+    - name: Build Flutter
+      run: |
+        flutter clean
+        flutter pub get
+
+    - name: Deploy to Firebase App Distribution
+      run: fastlane firebaseDistribute

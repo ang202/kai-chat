@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "688834453847",
+    "project_id": "kai-chat-888",
+    "storage_bucket": "kai-chat-888.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688834453847:android:5a503b147b5541b1711e12",
+        "android_client_info": {
+          "package_name": "com.kai.chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxaETnnEtMkbiepLG2QYPeYk2II48plCk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

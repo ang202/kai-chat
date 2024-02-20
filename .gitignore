@@ -46,3 +46,4 @@ app.*.map.json
 .env.dev
 .env.prod
 .env.uat
+/android/fastlane/firebase_login_key.json

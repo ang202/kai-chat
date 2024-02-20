@@ -1,0 +1,61 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    gradle(task: "clean assembleRelease")
+    crashlytics
+  
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Building a release apk"
+  lane :releaseApk do
+    sh("flutter build apk --obfuscate --split-debug-info=symbols --release --flavor prod --dart-define=environment=prod -t lib/main_prod.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+  end
+
+  desc "Building a development apk"
+  lane :devApk do
+    sh("flutter build apk --obfuscate --split-debug-info=symbols --debug --flavor dev --dart-define=environment=dev -t lib/main_dev.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+  end
+
+  desc "Publishing apk to Firebase Distribution"
+  lane :firebaseDistribute do |options|
+    firebase_login_credentials = ENV["FIREBASE_LOGIN_CREDENTIALS"] || "fastlane/firebase_login_key.json"
+    output_json_path = "./app/google-services.json"
+    build_output = load_json(json_path: output_json_path)
+    androidAppId = build_output["client"][0]["client_info"]["mobilesdk_app_id"]
+
+    if (!androidAppId.nil? && !firebase_login_credentials.nil?)
+      releaseApk
+      firebase_app_distribution(
+        app: androidAppId,
+        service_credentials_file: firebase_login_credentials,
+        release_notes: (!options[:notes].nil? && !options[:notes].empty?) ? options[:notes] : "",
+        android_artifact_type: "APK",
+        android_artifact_path: "../build/app/outputs/flutter-apk/app-arm64-v8a-prod-release.apk",
+      )
+    end
+  end
+end

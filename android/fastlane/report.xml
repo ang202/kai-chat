@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.006721">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: load_json" time="0.000849">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: Switch to android releaseApk lane" time="0.000146">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: flutter build apk --obfuscate --split-debug-info=symbols --release --flavor prod --dart-define=environment=prod -t lib/main_prod.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64" time="4.467787">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: firebase_app_distribution" time="9.290109">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>
