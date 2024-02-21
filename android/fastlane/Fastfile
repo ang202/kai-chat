@@ -15,29 +15,68 @@
 
 default_platform(:android)
 
+module Environment
+  DEV = "DEV"
+  UAT = "UAT"
+  SIT = "SIT"
+  PROD = "PROD"
+end
+
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
+  desc "Building a development apk"
+  private_lane :devApk do
+    sh("flutter build apk --obfuscate --split-debug-info=symbols --debug --flavor dev --dart-define=environment=dev -t lib/main_dev.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-dev-debug.apk ~/Downloads/dev.apk")
+  end
+  
+  desc "Building a SIT apk"
+  private_lane :sitApk do
+    sh("flutter build apk --profile --flavor sit --dart-define=environment=sit -t lib/main_sit.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-sit-profile.apk ~/Downloads/uat.apk")
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+  desc "Building a UAT apk"
+  private_lane :uatApk do
+    sh("flutter build apk --profile --flavor uat --dart-define=environment=uat -t lib/main_uat.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-uat-profile.apk ~/Downloads/uat.apk")
   end
 
   desc "Building a release apk"
-  lane :releaseApk do
+  private_lane :releaseApk do
     sh("flutter build apk --obfuscate --split-debug-info=symbols --release --flavor prod --dart-define=environment=prod -t lib/main_prod.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-prod-release.apk ~/Downloads/release.apk")
   end
 
-  desc "Building a development apk"
-  lane :devApk do
-    sh("flutter build apk --obfuscate --split-debug-info=symbols --debug --flavor dev --dart-define=environment=dev -t lib/main_dev.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+  desc "Building an apk"
+  lane :buildApk do
+    environment = UI.select("Select your environment: ", [Environment::DEV,Environment::UAT,Environment::SIT,Environment::PROD])
+    UI.success("You have selected '#{environment}'")
+    case environment
+    when Environment::DEV
+      devApk
+    when Environment::UAT
+      uatApk
+    when Environment::SIT
+      sitApk
+    when Environment::PROD
+      releaseApk
+    end
+  end
+
+  desc "Building an Android App Bundle"
+  lane :appBundle do
+    sh("flutter build appbundle --obfuscate --split-debug-info=symbols --release --flavor prod --dart-define=environment=prod -t lib/main_prod.dart --target-platform android-arm,android-arm64,android-x64")
+    sh("mv ../../build/app/outputs/bundle/prodRelease/app-prod-release.aab ~/Downloads/prodAppBundle.aab")
+    # sh("flutter packages pub run sentry_dart_plugin")
+  end
+
+  desc "Building an Beta version to Play Store"
+  lane :beta do
+    appBundle
+    supply(
+      track: "internal",
+      aab_paths: "../build/app/outputs/bundle/prodRelease/app-prod-release.aab"
+    )
   end
 
   desc "Publishing apk to Firebase Distribution"

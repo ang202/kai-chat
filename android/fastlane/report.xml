@@ -5,27 +5,17 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.006721">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000177">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: load_json" time="0.000849">
+      <testcase classname="fastlane.lanes" name="1: flutter build appbundle --obfuscate --split-debug-info=symbols --release --flavor prod --dart-define=environment=prod -t lib/main_prod.dart --target-platform android-arm,android-arm64,android-x64" time="8.495393">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: Switch to android releaseApk lane" time="0.000146">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="3: flutter build apk --obfuscate --split-debug-info=symbols --release --flavor prod --dart-define=environment=prod -t lib/main_prod.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64" time="4.467787">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="4: firebase_app_distribution" time="9.290109">
+      <testcase classname="fastlane.lanes" name="2: mv ../../build/app/outputs/bundle/prodRelease/app-prod-release.aab ~/Downloads/prodAppBundle.aab" time="0.009568">
         
       </testcase>
     
