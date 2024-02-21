@@ -1,5 +1,6 @@
 import 'package:kai_chat/core/components/asset_image_view.dart';
 import 'package:kai_chat/core/values/app_assets.dart';
+import 'package:kai_chat/core/values/app_colors.dart';
 import 'package:kai_chat/core/values/app_text_style.dart';
 import 'package:kai_chat/features/splash/presentation/controller/splash_controller.dart';
 import 'package:kai_chat/core/extensions/view_extensions.dart';
@@ -25,7 +26,11 @@ class SplashView extends GetView<SplashController> {
           const Text(
             "Welcome to the chat app.",
             style: MyTextStyle.h5,
-          )
+          ),
+          Obx(() => Text(
+                "${controller.version}+${controller.buildNumber}",
+                style: MyTextStyle.subtitle2.c(AppColors.gray700),
+              ))
         ],
       ),
     ).scaffoldWrapper();
