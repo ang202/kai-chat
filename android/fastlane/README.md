@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane android buildApk
 ```
 
-Building a apk
+Building an apk
 
 ### android appBundle
 
@@ -46,6 +46,14 @@ Building an Beta version to Play Store
 ```
 
 Publishing apk to Firebase Distribution
+
+### android increment_version
+
+```sh
+[bundle exec] fastlane android increment_version
+```
+
+
 
 ----
 

@@ -5,17 +5,17 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000177">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.001394">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: flutter build appbundle --obfuscate --split-debug-info=symbols --release --flavor prod --dart-define=environment=prod -t lib/main_prod.dart --target-platform android-arm,android-arm64,android-x64" time="8.495393">
+      <testcase classname="fastlane.lanes" name="1: load_json" time="0.000281">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: mv ../../build/app/outputs/bundle/prodRelease/app-prod-release.aab ~/Downloads/prodAppBundle.aab" time="0.009568">
+      <testcase classname="fastlane.lanes" name="2: firebase_app_distribution_get_latest_release" time="1.802529">
         
       </testcase>
     
