@@ -82,6 +82,11 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        project.android.applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                output.versionCodeOverride = flutterVersionCode.toInteger()
+            }
+        }
     }
 
     signingConfigs {
