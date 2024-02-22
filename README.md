@@ -8,62 +8,61 @@ These instructions will get you a copy of the project up and running on your loc
 - [Flutter SDK](https://flutter.dev/docs/get-started/install)
 - [Android Studio](https://developer.android.com/studio) or [Visual Studio Code](https://code.visualstudio.com/) with Flutter extensions installed
 - [OpenAI Key](https://platform.openai.com/api-keys)
+- [Fastlane](https://docs.fastlane.tools/getting-started/android/setup/)
 ### Installing
 1. Clone the repository to your local machine using Git or download the ZIP file.
 2. Open the project in your preferred IDE.
 3. Refer `.env.example` and create new files named `.env.dev`,`.env.prod`,`.env.uat`,`.env.sit` in the root directory of the project.
 4. Run `flutter pub get` to install the project dependencies.
-5. Run `flutter run --debug --flavor dev --dart-define=environment=dev -t lib/main_dev.dart` to start the app in debug mode.
+5. Run `flutter run --debug --flavor dev -t lib/main_dev.dart` to start the app in debug mode.
 
 ## Building
 
+### App Environment
+```
+DEV, UAT, PROD
+```
+### Prerequisites
+Install `Fastlane` 
+```
+brew install fastlane (macOS)
+sudo gem install fastlane (macOS/Linux/Windows)
+```
+For more, please visit [Fastlane Doc](https://docs.fastlane.tools/getting-started/android/setup/)
+
 **To build apk:**
 
-Development
-
 ```
-// Run from terminal
+cd android
+fastlane buildApk
+```
+
+**To use Firebase App Distribution:**
+1. Setup Firebase
+1. Include `android/app/google-service.json` from firebase
+3. Create service account from [Google Cloud Console](https://console.cloud.google.com/projectselector2/iam-admin/serviceaccounts) or get it from project owener
+4. Add the Firebase App Distribution Admin role.
+5. Create a private json key
+6. Change the json file name and include in `android/fastlane/fastlane-supply.json`
+
+For more, please visit [Firebase Distribution Fastlane](https://firebase.google.com/docs/app-distribution/android/distribute-fastlane)
+```
+cd android
+fastlane firebaseDistribute
+```
+
+**To run app:**
+```
 flutter run --debug --flavor dev --dart-define=environment=dev -t lib/main_dev.dart
-
-// Generate apk
-flutter build apk --debug --flavor dev --dart-define=environment=dev -t lib/main_dev.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64
-```
-
-SIT
-
-```
-// Run from terminal
 flutter run --profile --flavor sit --dart-define=environment=sit -t lib/main_sit.dart
-
-// Generate apk
-flutter build apk --profile --flavor sit --dart-define=environment=sit -t lib/main_sit.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64
-```
-
-UAT
-
-```
-// Run from terminal
 flutter run --profile --flavor uat --dart-define=environment=uat -t lib/main_uat.dart
-
-// Generate apk
-flutter build apk --profile --flavor uat --dart-define=environment=uat -t lib/main_uat.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64
-```
-
-PRODUCTION
-```
-// Run from terminal
 flutter run --release --flavor prod --dart-define=environment=prod -t lib/main.dart
-
-// Generate apk. Remember must to run `flutter packages pub run sentry_dart_plugin` to upload debug symbols
-flutter build apk --obfuscate --split-debug-info=symbols --release --flavor prod --dart-define=environment=prod -t lib/main.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64
-flutter packages pub run sentry_dart_plugin
 ```
 
 **To build appbundle:**
 1. Get the keystore file from the project owner.
-2. Create a file named [project]/android/key.properties that contains a reference to your keystore. Don’t include the angle brackets (< >). They indicate that the text serves as a placeholder for your values.
+2. Create a file named `[project]/android/key.properties` that contains a reference to your keystore. Don’t include the angle brackets (< >). They indicate that the text serves as a placeholder for your values.
 
-The storeFile might be located at /Users/<user name>/upload-keystore.jks on macOS or C:\\Users\\<username>\\upload-keystore.jks on Windows.
 ```bash
 storePassword=<password-from-previous-step>
 keyPassword=<password-from-previous-step>
@@ -76,15 +75,8 @@ storeFile=<keystore-file-location>
 5. Refer the commands list below
 
 ```
-// Staging UAT Testing (PlayStore Alpha)
-
-flutter build appbundle --release --flavor uat --dart-define=environment=uat -t lib/main_uat.dart --target-platform android-arm,android-arm64,android-x64
-
-// Generate production app bundle. Remember must to run `flutter packages pub run sentry_dart_plugin` to upload debug symbols
-
-flutter build appbundle --obfuscate --split-debug-info=symbols --release --flavor prod --dart-define=environment=prod -t lib/main.dart --target-platform android-arm,android-arm64,android-x64
-
-flutter packages pub run sentry_dart_plugin
+cd android
+fastlane appbundle
 ```
 
 For more info, please visit https://docs.flutter.dev/deployment/android#signing-the-app

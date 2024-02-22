@@ -47,14 +47,6 @@ Building an Beta version to Play Store
 
 Publishing apk to Firebase Distribution
 
-### android increment_version
-
-```sh
-[bundle exec] fastlane android increment_version
-```
-
-
-
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
