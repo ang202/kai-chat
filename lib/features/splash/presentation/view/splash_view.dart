@@ -1,3 +1,4 @@
+import 'package:kai_chat/config/flavor_config.dart';
 import 'package:kai_chat/core/components/asset_image_view.dart';
 import 'package:kai_chat/core/values/app_assets.dart';
 import 'package:kai_chat/core/values/app_colors.dart';
@@ -28,7 +29,7 @@ class SplashView extends GetView<SplashController> {
             style: MyTextStyle.h5,
           ),
           Obx(() => Text(
-                "${controller.version}+${controller.buildNumber}",
+                "${controller.version}+${controller.buildNumber} ${FlavorConfig.instance.flavor.name}",
                 style: MyTextStyle.subtitle2.c(AppColors.gray700),
               ))
         ],

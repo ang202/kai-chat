@@ -41,7 +41,7 @@ platform :android do
 
   desc "Building an Android App Bundle"
   lane :appBundle do
-    sh("flutter build appbundle --obfuscate --split-debug-info=symbols --release --flavor prod --dart-define=environment=prod -t lib/main_prod.dart --target-platform android-arm,android-arm64,android-x64")
+    sh("flutter build appbundle --obfuscate --split-debug-info=symbols --release --flavor prod -t lib/main_prod.dart --target-platform android-arm,android-arm64,android-x64")
     sh("mv ../../build/app/outputs/bundle/prodRelease/app-prod-release.aab ~/Downloads/prodAppBundle.aab")
     # sh("flutter packages pub run sentry_dart_plugin")
   end
@@ -66,6 +66,7 @@ platform :android do
       releaseApk(isMove: false)
       firebase_app_distribution(
         app: androidAppId,
+        groups: (!options[:group].nil? && !options[:group].empty?) ? options[:group] : "",
         service_credentials_file: firebase_login_credentials,
         release_notes: (!options[:notes].nil? && !options[:notes].empty?) ? options[:notes] : "",
         android_artifact_type: "APK",
@@ -85,25 +86,25 @@ platform :android do
 
   desc "Building a development apk"
   private_lane :devApk do
-    sh("flutter build apk --obfuscate --split-debug-info=symbols --debug --flavor dev --dart-define=environment=dev -t lib/main_dev.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+    sh("flutter build apk --obfuscate --split-debug-info=symbols --debug --flavor dev -t lib/main_dev.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
     sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-dev-debug.apk ~/Downloads/dev.apk")
   end
   
   desc "Building a SIT apk"
   private_lane :sitApk do
-    sh("flutter build apk --profile --flavor sit --dart-define=environment=sit -t lib/main_sit.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+    sh("flutter build apk --profile --flavor sit -t lib/main_sit.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
     sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-sit-profile.apk ~/Downloads/uat.apk")
   end
 
   desc "Building a UAT apk"
   private_lane :uatApk do
-    sh("flutter build apk --profile --flavor uat --dart-define=environment=uat -t lib/main_uat.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+    sh("flutter build apk --profile --flavor uat -t lib/main_uat.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
     sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-uat-profile.apk ~/Downloads/uat.apk")
   end
 
   desc "Building a release apk"
   private_lane :releaseApk do |options|
-    sh("flutter build apk --obfuscate --split-debug-info=symbols --release --flavor prod --dart-define=environment=prod -t lib/main_prod.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+    sh("flutter build apk --obfuscate --split-debug-info=symbols --release --flavor prod -t lib/main_prod.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
     sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-prod-release.apk ~/Downloads/release.apk") unless (options[:isMove] || true)
   end
 end
