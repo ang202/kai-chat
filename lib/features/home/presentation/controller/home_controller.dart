@@ -25,7 +25,7 @@ class HomeController extends BaseController {
             messageList.add(value!.choices!.first.message!);
             listKey.currentState?.insertItem(0);
           },
-          onError: (err) => debugPrint("HEHE Error ${err.detailedMessage}"));
+          onError: (err) => setError(err));
     }
   }
 }

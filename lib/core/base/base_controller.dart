@@ -2,6 +2,7 @@ import 'package:kai_chat/config/flavor_config.dart';
 import 'package:kai_chat/core/enum/view_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kai_chat/core/network/errors/failures.dart';
 import 'package:logger/logger.dart';
 
 abstract class BaseController extends GetxController {
@@ -44,15 +45,15 @@ abstract class BaseController extends GetxController {
 
   bool get isHomeIndicatorVisible => _isHomeIndicatorVisible();
 
-  // ViewState setError(Failure f) {
-  //   logger.e('Basecontroller error: >>>>>>> ${f.detailedMessage}');
+  ViewState setError(BaseFailure f) {
+    logger.e('Basecontroller error: >>>>>>> ${f.detailedMessage}');
 
-  //   if (f is NoInternetConnectionFailure) {
-  //     showErrorMessage(f.detailedMessage.tr);
-  //   } else {
-  //     showErrorMessage(f.detailedMessage);
-  //   }
+    // if (f is NoInternetConnectionFailure) {
+    // showErrorMessage(f.detailedMessage.tr);
+    // } else {
+    showErrorMessage(f.detailedMessage);
+    // }
 
-  //   return updateViewState(ViewState.error);
-  // }
+    return updateViewState(ViewState.error);
+  }
 }

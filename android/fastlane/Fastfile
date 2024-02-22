@@ -57,7 +57,7 @@ platform :android do
 
   desc "Publishing apk to Firebase Distribution"
   lane :firebaseDistribute do |options|
-    firebase_login_credentials = ENV["FIREBASE_LOGIN_CREDENTIALS"] || "fastlane/firebase_login_key.json"
+    firebase_login_credentials = "fastlane/firebase_login_key.json"
     output_json_path = "./app/google-services.json"
     build_output = load_json(json_path: output_json_path)
     androidAppId = build_output["client"][0]["client_info"]["mobilesdk_app_id"]

@@ -65,7 +65,7 @@ extension ExpandedWidget on Widget {
 
   Widget scaffoldWrapper([bool resizeToAvoidBottomInset = false]) => Scaffold(
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-        body: this,
+        body: SafeArea(child: this),
       );
 
   Widget ignorePointer([bool ignore = false]) =>
