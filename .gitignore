@@ -49,3 +49,4 @@ app.*.map.json
 /android/fastlane/firebase_login_key.json
 .github
 .jks
+report.xml
