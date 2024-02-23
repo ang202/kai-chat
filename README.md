@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 - [Flutter SDK](https://flutter.dev/docs/get-started/install)
 - [Android Studio](https://developer.android.com/studio) or [Visual Studio Code](https://code.visualstudio.com/) with Flutter extensions installed
 - [OpenAI Key](https://platform.openai.com/api-keys)
-- [Fastlane](https://docs.fastlane.tools/getting-started/android/setup/)
+- [Fastlane](https://docs.fastlane.tools/)
 ### Installing
 1. Clone the repository to your local machine using Git or download the ZIP file.
 2. Open the project in your preferred IDE.
@@ -28,7 +28,7 @@ Install `Fastlane`
 brew install fastlane (macOS)
 sudo gem install fastlane (macOS/Linux/Windows)
 ```
-For more, please visit [Fastlane Doc](https://docs.fastlane.tools/getting-started/android/setup/)
+For more, please visit [Fastlane Doc](https://docs.fastlane.tools/)
 
 **To build apk:**
 
