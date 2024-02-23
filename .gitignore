@@ -50,3 +50,4 @@ fastlane-supply.json
 .github
 .jks
 report.xml
+*.p8

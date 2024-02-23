@@ -15,13 +15,29 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios build
+### ios publishTestflight
 
 ```sh
-[bundle exec] fastlane ios build
+[bundle exec] fastlane ios publishTestflight
+```
+
+Upload testflight
+
+### ios buildIpa
+
+```sh
+[bundle exec] fastlane ios buildIpa
 ```
 
 Create iOS ipa
+
+### ios firebaseDistribute
+
+```sh
+[bundle exec] fastlane ios firebaseDistribute
+```
+
+Publishing ipa to Firebase Distribution
 
 ----
 

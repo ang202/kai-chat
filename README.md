@@ -16,6 +16,13 @@ These instructions will get you a copy of the project up and running on your loc
 4. Run `flutter pub get` to install the project dependencies.
 5. Run `flutter run --debug --flavor dev -t lib/main_dev.dart` to start the app in debug mode.
 
+## Important credential for building this project
+
+```
+AuthKey.p8 (iOS Testflight), 
+fastlane-supply.json (Firebase App Distribution)
+```
+
 ## Building
 
 ### App Environment
@@ -39,11 +46,11 @@ fastlane buildApk
 
 **To use Firebase App Distribution:**
 1. Setup Firebase
-1. Include `android/app/google-service.json` from firebase
+1. Include `[project]/android/app/google-service.json` from firebase
 3. Create service account from [Google Cloud Console](https://console.cloud.google.com/projectselector2/iam-admin/serviceaccounts) or get it from project owener
 4. Add the Firebase App Distribution Admin role.
 5. Create a private json key
-6. Change the json file name and include in `android/fastlane/fastlane-supply.json`
+6. Change the json file name and include in `[project]/fastlane-supply.json`
 
 For more, please visit [Firebase Distribution Fastlane](https://firebase.google.com/docs/app-distribution/android/distribute-fastlane)
 ```
