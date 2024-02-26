@@ -5,22 +5,32 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000514">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000259">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: Switch to ios buildIpa lane" time="0.00014">
+      <testcase classname="fastlane.lanes" name="1: app_store_connect_api_key" time="0.00494">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: flutter build ipa --release --flavor prod -t lib/main_prod.dart --export-method=ad-hoc" time="107.34902">
+      <testcase classname="fastlane.lanes" name="2: Switch to ios buildIpa lane" time="0.000958">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: firebase_app_distribution" time="12.105079">
+      <testcase classname="fastlane.lanes" name="3: Switch to ios prodIpa lane" time="0.000266">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: flutter build ipa --release --flavor prod -t lib/main_prod.dart  --build-number=3" time="100.621127">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: pilot" time="81.4474">
         
       </testcase>
     

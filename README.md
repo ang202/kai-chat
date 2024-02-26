@@ -17,10 +17,10 @@ These instructions will get you a copy of the project up and running on your loc
 5. Run `flutter run --debug --flavor dev -t lib/main_dev.dart` to start the app in debug mode.
 
 ## Important credential for building this project
-
+Get from project owner.
 ```
-AuthKey.p8 (iOS Testflight), 
-fastlane-supply.json (Firebase App Distribution)
+AuthKey.p8 (Appstore Connect API Key for iOS Testflight), 
+fastlane-supply.json (GCP Service Account for Play Store & Firebase App Distribution)
 ```
 
 ## Building

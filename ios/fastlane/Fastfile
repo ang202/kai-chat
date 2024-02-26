@@ -15,35 +15,73 @@
 
 default_platform(:ios)
 
+module Environment
+  DEV = "DEV"
+  UAT = "UAT"
+  SIT = "SIT"
+  PROD = "PROD"
+end
+
 platform :ios do
   desc "Upload testflight"
-  lane :publishTestflight do
+  lane :publishTestflight do |options| 
     api_key = app_store_connect_api_key(
-      key_id: "458U5JD79T",
-      issuer_id: "0a1c3557-dcc1-4267-82f8-ac6a2921b06b",
+      key_id: "458U5JD79T", # FOR NEUROGINE PROJECT
+      issuer_id: "0a1c3557-dcc1-4267-82f8-ac6a2921b06b", # FOR NEUROGINE PROJECT
       key_filepath: "fastlane/AuthKey.p8",
       duration: 1200, # optional (maximum 1200)
       in_house: false # optional but may be required if using match/sigh
     )
-    buildIpa
+    buildIpa(buildNumber: options[:buildNumber])
     pilot(ipa: "../build/ios/ipa/kai_chat.ipa", api_key: api_key, skip_waiting_for_build_processing: true)
   end
 
   desc "Create iOS ipa"
   lane :buildIpa do |options|
-    sh("flutter build ipa --release --flavor prod -t lib/main_prod.dart #{"--export-method=ad-hoc" if options[:firebaseDistribute]}")
+    environment = UI.select("Select your environment: ", [Environment::DEV,Environment::UAT,Environment::SIT,Environment::PROD])
+    UI.success("You have selected '#{environment}' environment")
+    case environment
+    when Environment::DEV
+      devIpa(firebaseDistribute: options[:firebaseDistribute], buildNumber: options[:buildNumber])
+    when Environment::UAT
+      uatIpa(firebaseDistribute: options[:firebaseDistribute], buildNumber: options[:buildNumber])
+    when Environment::SIT
+      sitIpa(firebaseDistribute: options[:firebaseDistribute], buildNumber: options[:buildNumber])
+    when Environment::PROD
+      prodIpa(firebaseDistribute: options[:firebaseDistribute], buildNumber: options[:buildNumber])
+    end
   end
 
   desc "Publishing ipa to Firebase Distribution"
   lane :firebaseDistribute do |options|
     ENV["GOOGLE_APPLICATION_CREDENTIALS"] = "../fastlane-supply.json"
     UI.user_error!("You need to include fastlane-supply.json") if(ENV["GOOGLE_APPLICATION_CREDENTIALS"].nil?)
-    buildIpa(firebaseDistribute: true)
+    buildIpa(firebaseDistribute: true, buildNumber: options[:buildNumber])
     firebase_app_distribution(
       app: "1:688834453847:ios:e5503dacb07ffdb2711e12", # TODO: UPDATE APP ID FROM FIREBASE
       groups: (!options[:group].nil? && !options[:group].empty?) ? options[:group] : "",
       release_notes: (!options[:notes].nil? && !options[:notes].empty?) ? options[:notes] : "",
-      ipa_path: "../build/ios/ipa/kai_chat.ipa", # TODO: UPDATE APPP NAME
+      ipa_path: "../build/ios/ipa/kai_chat.ipa", # TODO: UPDATE APP NAME
     )
+  end
+
+  desc "Building a development ipa"
+  private_lane :devIpa do |options|
+    sh("flutter build ipa --debug --flavor dev -t lib/main_dev.dart #{"--export-method=ad-hoc" if options[:firebaseDistribute]} #{"--build-number=#{options[:buildNumber]}" if !options[:buildNumber].nil?}")
+  end
+  
+  desc "Building a SIT ipa"
+  private_lane :sitIpa do |options|
+    sh("flutter build ipa --profile --flavor sit -t lib/main_sit.dart #{"--export-method=ad-hoc" if options[:firebaseDistribute]} #{"--build-number=#{options[:buildNumber]}" if !options[:buildNumber].nil?}")
+  end
+
+  desc "Building a UAT ipa"
+  private_lane :uatIpa do |options|
+    sh("flutter build ipa --profile --flavor uat -t lib/main_uat.dart #{"--export-method=ad-hoc" if options[:firebaseDistribute]} #{"--build-number=#{options[:buildNumber]}" if !options[:buildNumber].nil?}")
+  end
+
+  desc "Building a production ipa"
+  private_lane :prodIpa do |options|
+    sh("flutter build ipa --release --flavor prod -t lib/main_prod.dart #{"--export-method=ad-hoc" if options[:firebaseDistribute]} #{"--build-number=#{options[:buildNumber]}" if !options[:buildNumber].nil?}")
   end
 end
