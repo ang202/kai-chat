@@ -25,7 +25,7 @@ class SplashView extends GetView<SplashController> {
             height: Get.width * 0.7,
           ),
           const Text(
-            "Welcome to the chat app",
+            "Welcome to the chat app.",
             style: MyTextStyle.h5,
           ),
           Obx(() => Text(
