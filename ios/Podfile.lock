@@ -13,6 +13,11 @@ PODS:
   - Flutter (1.0.0)
   - flutter_secure_storage (6.0.0):
     - Flutter
+  - fluttertoast (0.0.2):
+    - Flutter
+    - Toast
+  - freerasp (1.0.0):
+    - Flutter
   - GoogleUtilities/Environment (7.12.0):
     - PromisesObjC (< 3.0, >= 1.2)
   - GoogleUtilities/Logger (7.12.0):
@@ -31,6 +36,7 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - Toast (4.1.0)
   - ua_client_hints (1.2.2):
     - Flutter
 
@@ -38,6 +44,8 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - freerasp (from `.symlinks/plugins/freerasp/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -52,6 +60,7 @@ SPEC REPOS:
     - PromisesObjC
     - Sentry
     - SentryPrivate
+    - Toast
 
 EXTERNAL SOURCES:
   firebase_core:
@@ -60,6 +69,10 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
+  freerasp:
+    :path: ".symlinks/plugins/freerasp/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   sentry_flutter:
@@ -76,6 +89,8 @@ SPEC CHECKSUMS:
   FirebaseCoreInternal: 43c1788eaeee9d1b97caaa751af567ce11010d00
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
+  fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
+  freerasp: bb827d80b926abcfb8f4ca4ff4557c2fe4a5ae21
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
@@ -83,6 +98,7 @@ SPEC CHECKSUMS:
   sentry_flutter: 03e7660857a8cdb236e71456a7e8447b65c8a788
   SentryPrivate: 006b24af16828441f70e2ab6adf241bd0a8ad130
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
+  Toast: ec33c32b8688982cecc6348adeae667c1b9938da
   ua_client_hints: 7f4e0f5d390685e8f7efd6eb363594f760108926
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
