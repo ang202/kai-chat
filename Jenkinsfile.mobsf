@@ -67,7 +67,27 @@ pipeline {
             }
         }
 
-        // Add on more build steps eg:test
+        stage('MobSF Scan') {
+            steps {
+                script {
+                    def apkPath = "/Users/kai/Downloads/dev.apk"
+                    def mobsUrl = "http://0.0.0.0:8000"
+                    def mobsToken = "80627bff32ffd45e6f4c673ac5ea19aa31b4b4897ee0ae1f3d79b26b78bb2304"
+                    // Upload APK to MobSF
+                    def curlCommand = "curl -s -F 'file=@${apkPath}' '${mobsUrl}/api/v1/upload' -H 'Authorization:${mobsToken}'"
+                    def uploadResult = sh(script: curlCommand, returnStdout: true).trim()
+                    if (uploadResult) {
+                        // Parse JSON result and convert to serializable Map
+                        def resultJson = parseJsonToMap(uploadResult)
+                        def hash = resultJson.hash
+                        sh "curl -X POST --url '${mobsUrl}/api/v1/scan' --data 'hash=${hash}' -H 'Authorization:${mobsToken}'"
+                        echo "Please visit to view your report: ${mobsUrl}/static_analyzer/${hash}/"
+                    } else {
+                        error "Upload command returned empty result"
+                    }
+                }
+            }
+        }
     }
     
     post {
@@ -75,4 +95,16 @@ pipeline {
             echo 'Pipeline completed.'
         }
     }
+}
+
+// Helper method to parse JSON and return a serializable Map
+@NonCPS
+def parseJsonToMap(String json) {
+    def jsonSlurper = new groovy.json.JsonSlurper()
+    def lazyMap = jsonSlurper.parseText(json)
+    def serializable = [:]
+    lazyMap.each { key, value ->
+        serializable[key] = value
+    }
+    return serializable
 }
