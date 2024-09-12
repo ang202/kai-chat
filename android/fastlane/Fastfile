@@ -39,6 +39,11 @@ platform :android do
     end
   end
 
+  desc "Building an dev apk"
+  lane :buildDevApk do
+    devApk
+  end
+
   desc "Building an Android App Bundle"
   lane :appBundle do |options|
     sh("flutter build appbundle --obfuscate --split-debug-info=symbols --release --flavor prod -t lib/main_prod.dart")
@@ -61,6 +66,7 @@ platform :android do
     output_json_path = "./app/google-services.json"
     build_output = load_json(json_path: output_json_path)
     androidAppId = build_output["client"][0]["client_info"]["mobilesdk_app_id"]
+    UI.message("Android app id: #{androidAppId}")
 
     # Prompt error if file not found
     UI.user_error!("You need to include google-service.json and fastlane-supply.json") if(androidAppId.nil? || ENV["GOOGLE_APPLICATION_CREDENTIALS"].nil?)
@@ -69,10 +75,12 @@ platform :android do
     prodApk(isMove: false)
     firebase_app_distribution(
       app: androidAppId,
+      service_credentials_file: ENV["GOOGLE_APPLICATION_CREDENTIALS"],
       groups: (!options[:group].nil? && !options[:group].empty?) ? options[:group] : "",
       release_notes: (!options[:notes].nil? && !options[:notes].empty?) ? options[:notes] : "",
       android_artifact_type: "APK",
       android_artifact_path: "../build/app/outputs/flutter-apk/app-arm64-v8a-prod-release.apk",
+      debug: true
     )
   end
 
@@ -97,6 +105,6 @@ platform :android do
   desc "Building a production apk"
   private_lane :prodApk do |options|
     sh("flutter build apk --obfuscate --split-debug-info=symbols --release --flavor prod -t lib/main_prod.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
-    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-prod-release.apk ~/Downloads/release.apk") if (options[:isMove] || true)
+    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-prod-release.apk ~/Downloads/release.apk") if (options[:isMove])
   end
 end
