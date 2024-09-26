@@ -43,7 +43,7 @@ dependencies:
   logger: ^2.0.1
 
   # Sentry
-  sentry_flutter: ^7.12.0
+  sentry_flutter: ^8.9.0
 
   # Loading Animation
   loading_animation_widget: ^1.2.0+4
@@ -60,6 +60,8 @@ dependencies:
   freerasp: ^6.4.0
 
   fluttertoast: ^8.2.4
+
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:

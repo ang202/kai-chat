@@ -20,9 +20,9 @@ class SplashView extends GetView<SplashController> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          AssetImageView(
+          const AssetImageView(
             fileName: AppAssets.welcomeLottie,
-            height: Get.width * 0.7,
+            height: 300,
           ),
           const Text(
             "Welcome to the chat app.",
