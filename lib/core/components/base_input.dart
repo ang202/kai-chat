@@ -186,7 +186,7 @@ class _BaseInputState extends State<BaseInput> {
             focusNode: focusNode,
             autocorrect: false,
             obscureText: widget.isPassword ? !_passwordVisible : false,
-            style: widget.inputStyle ?? MyTextStyle.body1,
+            style: widget.inputStyle ?? MyTextStyle.s,
             onChanged: widget.onChanged,
             onTapOutside: (event) {
               focusNode.unfocus();
@@ -211,10 +211,10 @@ class _BaseInputState extends State<BaseInput> {
               hintText: widget.hintText,
               border: InputBorder.none,
               hintStyle:
-                  widget.hintStyle ?? MyTextStyle.body1.c(AppColors.gray400),
-              errorStyle: MyTextStyle.body1.c(AppColors.red600),
+                  widget.hintStyle ?? MyTextStyle.s.c(AppColors.gray400),
+              errorStyle: MyTextStyle.s.c(AppColors.red600),
               labelText: widget.label ?? "",
-              labelStyle: MyTextStyle.body1.copyWith(
+              labelStyle: MyTextStyle.s.copyWith(
                   color: focusNode.hasFocus
                       ? AppColors.colorAccent
                       : AppColors.gray600,
@@ -247,7 +247,7 @@ class _BaseInputState extends State<BaseInput> {
                                 right: AppValues.double5),
                             child: const Text(
                               '+60',
-                              style: MyTextStyle.body1,
+                              style: MyTextStyle.s,
                             ),
                           ),
                       ],

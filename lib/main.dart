@@ -1,17 +1,18 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freerasp/freerasp.dart';
+import 'package:get/get.dart';
 import 'package:kai_chat/config/flavor_config.dart';
 import 'package:kai_chat/core/base/base_binding.dart';
 import 'package:kai_chat/core/routes/app_pages.dart';
+import 'package:kai_chat/core/utils/app_translations.dart';
 import 'package:kai_chat/core/values/app_theme.dart';
 import 'package:kai_chat/features/splash/presentation/view/splash_view.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void mainGlobal() async {
   dotenv.load(fileName: FlavorConfig.fileName);
-  await triggerRasp();
+  // await triggerRasp();
   runApp(const MyApp());
 }
 
@@ -85,6 +86,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      translations: AppTranslations(),
+      locale: Get.locale,
+      fallbackLocale: const Locale('en', 'US'),
       debugShowCheckedModeBanner: false,
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,

@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "688834453847",
     "project_id": "kai-chat-888",
-    "storage_bucket": "kai-chat-888.appspot.com"
+    "storage_bucket": "kai-chat-888.firebasestorage.app"
   },
   "client": [
     {

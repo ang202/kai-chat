@@ -1,12 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kai_chat/config/flavor_config.dart';
 import 'package:kai_chat/core/components/asset_image_view.dart';
+import 'package:kai_chat/core/extensions/view_extensions.dart';
 import 'package:kai_chat/core/values/app_assets.dart';
 import 'package:kai_chat/core/values/app_colors.dart';
 import 'package:kai_chat/core/values/app_text_style.dart';
 import 'package:kai_chat/features/splash/presentation/controller/splash_controller.dart';
-import 'package:kai_chat/core/extensions/view_extensions.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class SplashView extends GetView<SplashController> {
   const SplashView({super.key});
@@ -24,13 +24,13 @@ class SplashView extends GetView<SplashController> {
             fileName: AppAssets.welcomeLottie,
             height: 300,
           ),
-          const Text(
+          Text(
             "Welcome to the chat app.",
-            style: MyTextStyle.h5,
+            style: MyTextStyle.m.bold,
           ),
           Obx(() => Text(
                 "${controller.version}+${controller.buildNumber} ${FlavorConfig.instance.flavor.name}",
-                style: MyTextStyle.subtitle2.c(AppColors.gray700),
+                style: MyTextStyle.xxs.c(AppColors.gray700),
               ))
         ],
       ),

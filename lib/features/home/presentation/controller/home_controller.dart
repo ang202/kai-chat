@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kai_chat/core/base/base_controller.dart';
 import 'package:kai_chat/features/home/domain/model/chat_request.dart';
 import 'package:kai_chat/features/home/domain/repository/chat_repository.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class HomeController extends BaseController {
   final ChatRepository chatRepository = Get.find();

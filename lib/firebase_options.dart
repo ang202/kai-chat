@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:688834453847:android:5a503b147b5541b1711e12',
     messagingSenderId: '688834453847',
     projectId: 'kai-chat-888',
-    storageBucket: 'kai-chat-888.appspot.com',
+    storageBucket: 'kai-chat-888.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -62,7 +62,8 @@ class DefaultFirebaseOptions {
     appId: '1:688834453847:ios:e5503dacb07ffdb2711e12',
     messagingSenderId: '688834453847',
     projectId: 'kai-chat-888',
-    storageBucket: 'kai-chat-888.appspot.com',
+    storageBucket: 'kai-chat-888.firebasestorage.app',
     iosBundleId: 'com.kai.chat.ios',
   );
+
 }

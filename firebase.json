@@ -1,0 +1,30 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "kai-chat-888",
+          "appId": "1:688834453847:android:5a503b147b5541b1711e12",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "kai-chat-888",
+          "appId": "1:688834453847:ios:e5503dacb07ffdb2711e12",
+          "uploadDebugSymbols": true,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "kai-chat-888",
+          "configurations": {
+            "android": "1:688834453847:android:5a503b147b5541b1711e12",
+            "ios": "1:688834453847:ios:e5503dacb07ffdb2711e12"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
-import 'package:kai_chat/core/values/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:kai_chat/core/values/app_colors.dart';
 
 extension ExpandedWidget on Widget {
   Widget padding(EdgeInsetsGeometry edge) => Padding(
@@ -53,13 +53,34 @@ extension ExpandedWidget on Widget {
       ),
       child: this);
 
-  Widget constraintsWrapper(double width) => Center(
-          child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: width,
+  Widget constraintsWrapper(
+          {double? width,
+          double? height,
+          Color? color,
+          bool isCenter = true}) =>
+      Container(
+        color: color ?? AppColors.white,
+        alignment: isCenter ? Alignment.center : null,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: height ?? double.infinity,
+            maxWidth: width ?? double.infinity,
+          ),
+          child: this,
         ),
-        child: this,
-      ));
+      );
+
+  Widget dialogWrapper(
+          {bool withPadding = true, EdgeInsets? customPadding}) =>
+      Dialog(
+          backgroundColor: AppColors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          elevation: 0.0,
+          child: padding(withPadding
+              ? customPadding ??
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 20)
+              : EdgeInsets.zero));
 
   Widget repaintBoundary() => RepaintBoundary(child: this);
 

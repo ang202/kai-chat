@@ -34,7 +34,6 @@ class AppColors {
   static const Color accent50 = Color(0xFFEFF6FF);
   static const Color accent100 = Color(0xFFDBEAFE);
   static const Color accent400 = Color(0xFF489DDF);
-  static const Color accent500 = Color(0xFF007AFF);
   static const Color accent700 = Color(0xFF20509E);
   static const Color colorAccent = Color(0xFF20509E);
 }

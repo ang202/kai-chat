@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kai_chat/core/components/asset_image_view.dart';
 import 'package:kai_chat/core/enum/view_state.dart';
 import 'package:kai_chat/core/extensions/view_extensions.dart';
@@ -8,8 +10,6 @@ import 'package:kai_chat/core/values/app_values.dart';
 import 'package:kai_chat/features/home/domain/model/chat_request.dart';
 import 'package:kai_chat/features/home/presentation/controller/home_controller.dart';
 import 'package:kai_chat/features/home/presentation/widgets/chat_column.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -34,7 +34,6 @@ class HomeView extends GetView<HomeController> {
               width: AppValues.double200,
             ),
             Obx(() {
-              debugPrint("${controller.messageList.length}");
               List<Message?>? messageList =
                   controller.messageList.reversed.toList();
               return Column(
@@ -56,11 +55,11 @@ class HomeView extends GetView<HomeController> {
                           children: [
                             Row(
                               children: [
-                                LoadingAnimationWidget.prograssiveDots(
+                                LoadingAnimationWidget.progressiveDots(
                                     color: AppColors.gray400, size: 30),
                                 Text(
                                   "Assistant is thinking",
-                                  style: MyTextStyle.subtitle1
+                                  style: MyTextStyle.xs
                                       .c(AppColors.gray600),
                                 ).padding(const EdgeInsets.only(
                                     left: AppValues.double10))
@@ -90,7 +89,7 @@ class HomeView extends GetView<HomeController> {
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Please enter your question",
-                        hintStyle: MyTextStyle.body1.c(AppColors.gray400)),
+                        hintStyle: MyTextStyle.s.c(AppColors.gray400)),
                   ).padding(const EdgeInsets.only(left: AppValues.double10)),
                 )),
             const AssetImageView(

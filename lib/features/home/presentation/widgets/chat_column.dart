@@ -27,7 +27,7 @@ class ChatColumn extends StatelessWidget {
                   ).padding(const EdgeInsets.only(right: AppValues.double10))
                 : Text(
                     "U",
-                    style: MyTextStyle.h6.c(AppColors.white),
+                    style: MyTextStyle.s.bold.c(AppColors.white),
                   )
                     .capsulise(
                         color: AppColors.green600,
@@ -37,13 +37,13 @@ class ChatColumn extends StatelessWidget {
                     .padding(const EdgeInsets.only(right: AppValues.double10)),
             Text(
               message?.role?.toCapitalized() ?? "",
-              style: MyTextStyle.h5,
+              style: MyTextStyle.m.bold,
             )
           ],
         ),
         Text(
           "${message?.content}",
-          style: MyTextStyle.body1.c(AppColors.gray600),
+          style: MyTextStyle.s.c(AppColors.gray600),
         ).padding(const EdgeInsets.only(top: AppValues.double10)),
       ],
     ).padding(const EdgeInsets.symmetric(horizontal: AppValues.double20));

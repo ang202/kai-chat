@@ -18,7 +18,7 @@ class BaseTextStyle extends TextStyle {
 }
 
 class MyTextStyle {
-  static const FontWeight fontWeight = FontWeight.w600;
+  static const FontWeight fontWeight = FontWeight.w400;
 
   static const TextStyle xl5 = BaseTextStyle(
     fontSize: 42,
@@ -28,47 +28,39 @@ class MyTextStyle {
     fontSize: 32,
     fontWeight: fontWeight,
   );
-  static const TextStyle h1 = BaseTextStyle(
+  static const TextStyle xl1 = BaseTextStyle(
+    fontSize: 28,
+    fontWeight: fontWeight,
+  );
+  static const TextStyle xxxl = BaseTextStyle(
     fontSize: 24,
     fontWeight: fontWeight,
   );
-  static const TextStyle h2 = BaseTextStyle(
+  static const TextStyle xxl = BaseTextStyle(
     fontSize: 22,
     fontWeight: fontWeight,
   );
-  static const TextStyle h3 = BaseTextStyle(
+  static const TextStyle xl = BaseTextStyle(
     fontSize: 20,
     fontWeight: fontWeight,
   );
-  static const TextStyle h4 = BaseTextStyle(
+  static const TextStyle l = BaseTextStyle(
     fontSize: 18,
     fontWeight: fontWeight,
   );
-  static const TextStyle h5 = BaseTextStyle(
+  static const TextStyle m = BaseTextStyle(
     fontSize: 16,
     fontWeight: fontWeight,
   );
-  static const TextStyle h6 = BaseTextStyle(
+  static const TextStyle s = BaseTextStyle(
     fontSize: 14,
     fontWeight: fontWeight,
   );
-  static const TextStyle h7 = BaseTextStyle(
+  static const TextStyle xs = BaseTextStyle(
     fontSize: 12,
     fontWeight: fontWeight,
   );
-  static const TextStyle body1 = BaseTextStyle(
-    fontSize: 14,
-  );
-  static const TextStyle body2 = BaseTextStyle(
-    fontSize: 16,
-  );
-  static const TextStyle body3 = BaseTextStyle(
-    fontSize: 18,
-  );
-  static const TextStyle subtitle1 = BaseTextStyle(
-    fontSize: 12,
-  );
-  static const TextStyle subtitle2 = BaseTextStyle(
+  static const TextStyle xxs = BaseTextStyle(
     fontSize: 10,
   );
 }
@@ -76,5 +68,9 @@ class MyTextStyle {
 // Extension to help add params in TextStyle
 extension TextStyleHelpers on TextStyle {
   TextStyle c(Color value) => copyWith(color: value);
-  TextStyle underline() => copyWith(decoration: TextDecoration.underline);
+  TextStyle get regular => copyWith(fontWeight: FontWeight.w400);
+  TextStyle get medium => copyWith(fontWeight: FontWeight.w500);
+  TextStyle get bold => copyWith(fontWeight: FontWeight.w700);
+  TextStyle get extraBold => copyWith(fontWeight: FontWeight.w800);
+  TextStyle get underline => copyWith(decoration: TextDecoration.underline);
 }
