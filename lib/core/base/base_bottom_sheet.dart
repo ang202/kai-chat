@@ -4,7 +4,11 @@ import 'package:kai_chat/core/values/app_colors.dart';
 import 'package:kai_chat/core/values/app_values.dart';
 
 class BaseBottomSheet {
-  static void show({required Widget child, bool? isScrollControlled = false}) {
+  static void show({
+    required Widget child,
+    bool? isScrollControlled = false,
+    bool? isDismissible = true,
+  }) {
     Get.bottomSheet(
       Container(
           padding: const EdgeInsets.only(top: AppValues.double2),
@@ -16,6 +20,8 @@ class BaseBottomSheet {
             child: child,
           )),
       isScrollControlled: isScrollControlled ?? false,
+      isDismissible: isDismissible ?? true,
+      enableDrag: isDismissible ?? true,
     );
   }
 }

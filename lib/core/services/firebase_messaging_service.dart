@@ -145,7 +145,30 @@ class FirebaseMessagingService extends GetxService {
     );
     debugPrint(
         "Notification Setting ${settings.authorizationStatus} ${settings.criticalAlert}");
-    return settings.authorizationStatus != AuthorizationStatus.denied;
+    if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+      BaseBottomSheet.show(
+          child: PopScope(
+              canPop: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Push Notification is required for better user experience!",
+                    style: MyTextStyle.l.bold,
+                  ),
+                  const Spacer(),
+                  BaseButton(
+                      text: "Go to setting",
+                      fullWidth: true,
+                      onClick: () {
+                        openAppSettings();
+                      })
+                ],
+              ).padding(const EdgeInsets.all(AppValues.double20))));
+      return false;
+    }
+    return true;
   }
 
   // Register Isolate Receiver Port
@@ -158,7 +181,6 @@ class FirebaseMessagingService extends GetxService {
     receivePort.listen((dynamic message) async {
       debugPrint(
           "Check flutter notification $isFlutterLocalNotificationsInitialized");
-      await setupFlutterNotifications();
       await flutterLocalNotificationsPlugin.cancelAll();
       showFlutterNotification(RemoteMessage.fromMap(message));
     });
@@ -166,11 +188,11 @@ class FirebaseMessagingService extends GetxService {
 
   Future<void> init() async {
     if (await _isAllowNotification()) {
-      // Setup interaction handling
-      await setupInteractedMessage();
-
       // Initialize local notifications
       await setupFlutterNotifications();
+
+      // Setup interaction handling
+      await setupInteractedMessage();
 
       FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
         debugPrint("FCM Token ${fcmToken}");
@@ -187,27 +209,6 @@ class FirebaseMessagingService extends GetxService {
 
       // Listen for foreground messages
       FirebaseMessaging.onMessage.listen(showFlutterNotification);
-    } else {
-      Future.delayed(const Duration(seconds: 5), () {
-        BaseBottomSheet.show(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Push Notification is required for better user experience!",
-              style: MyTextStyle.l.bold,
-            ),
-            const Spacer(),
-            BaseButton(
-                text: "Go to setting",
-                fullWidth: true,
-                onClick: () {
-                  openAppSettings();
-                })
-          ],
-        ).padding(const EdgeInsets.all(AppValues.double20)));
-      });
     }
   }
 }

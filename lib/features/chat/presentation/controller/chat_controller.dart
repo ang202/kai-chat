@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kai_chat/core/base/base_controller.dart';
+import 'package:kai_chat/core/base/main_controller.dart';
 
 class ChatController extends BaseController {
   final Map<String, dynamic> fcmData = Get.arguments;
+  MainController mainController = Get.find();
 
   @override
   void onInit() {
@@ -11,13 +13,7 @@ class ChatController extends BaseController {
     super.onInit();
   }
 
-  void updateLocale() async {
-    if (Get.locale == const Locale("en", "US")) {
-      Get.updateLocale(const Locale('my', 'MM'));
-    } else if (Get.locale == const Locale("my", "MM")) {
-      Get.updateLocale(const Locale('en', 'US'));
-    } else {
-      Get.updateLocale(const Locale('en', 'US'));
-    }
+  void updateLocale() {
+    mainController.updateLocale();
   }
 }
