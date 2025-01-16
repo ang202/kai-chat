@@ -59,7 +59,7 @@ dependencies:
   firebase_messaging: ^15.1.6
 
   # Talsec Protector
-  freerasp: ^6.4.0
+  freerasp: ^6.11.0
 
   fluttertoast: ^8.2.4
 

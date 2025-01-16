@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:kai_chat/core/base/main_controller.dart';
 import 'package:kai_chat/core/network/dio_client.dart';
 import 'package:kai_chat/core/network/utils/connection_checker.dart';
 import 'package:kai_chat/core/repositories/local_repository.dart';
@@ -22,5 +23,8 @@ class BaseBinding extends Bindings {
         () => DioClientImpl(dio: Get.find(), connectionChecker: Get.find()),
         fenix: true);
     Get.lazyPut<LocalRepository>(() => LocalRepository(), fenix: true);
+
+    // Controller
+    Get.put<MainController>(MainController(), permanent: true);
   }
 }

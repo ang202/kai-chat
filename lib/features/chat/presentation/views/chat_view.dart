@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kai_chat/core/extensions/view_extensions.dart';
+import 'package:kai_chat/core/values/app_strings.dart';
 import 'package:kai_chat/core/values/app_text_style.dart';
 import 'package:kai_chat/core/values/app_values.dart';
 import 'package:kai_chat/features/chat/presentation/controller/chat_controller.dart';
@@ -14,7 +15,7 @@ class ChatView extends GetView<ChatController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Chat".tr,
+          AppStrings.chat.tr,
           style: MyTextStyle.xxxl.bold,
         ).onTap(() {
           controller.updateLocale();

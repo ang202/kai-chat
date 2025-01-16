@@ -13,8 +13,8 @@ class ChatController extends BaseController {
 
   void updateLocale() async {
     if (Get.locale == const Locale("en", "US")) {
-      Get.updateLocale(const Locale('ko', 'KR'));
-    } else if (Get.locale == const Locale("ko", "KR")) {
+      Get.updateLocale(const Locale('my', 'MM'));
+    } else if (Get.locale == const Locale("my", "MM")) {
       Get.updateLocale(const Locale('en', 'US'));
     } else {
       Get.updateLocale(const Locale('en', 'US'));
