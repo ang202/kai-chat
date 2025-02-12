@@ -1,0 +1,32 @@
+name: deploy staging app
+
+on:
+  push:
+    branches: [staging]
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+jobs:
+  test:
+    uses: ./.github/workflows/ci_test.yml
+    secrets:
+      env_file: |
+        API_URL=https://example.com
+    with:
+      environment: test
+
+  build:
+    uses: ./.github/workflows/build_app.yml
+    needs: [test]
+    secrets:
+      KEY_STORE: ${{ secrets.KEY_STORE }}
+      KEY_PROPERTIES: ${{ secrets.KEY_PROPERTIES }}
+      FASTLANE_SUPPLY: ${{ secrets.FASTLANE_SUPPLY }}
+      env_file: |
+        API_URL=${{ secrets.STAGING_API_URL }}
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    with:
+      environment: staging

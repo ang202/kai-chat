@@ -47,7 +47,6 @@ app.*.map.json
 .env.prod
 .env.uat
 fastlane-supply.json
-.github
 .jks
 report.xml
 *.p8

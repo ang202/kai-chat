@@ -1,0 +1,53 @@
+name: CI Test
+
+on:
+  push:
+    branches: [main]
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        description: environment to deploy to
+        required: true
+    secrets:
+      env_file:
+        required: true
+
+jobs:
+  unit_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.3"
+          cache: true
+
+      - name: Create env file
+        run: |
+          rm -f .env
+          touch .env.prod
+          touch .env.dev
+          touch .env.uat
+          echo "${{ secrets.env_file }}" >> .env
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test test/main_test.dart
+
+  # integration_test:
+  #   runs-on: windows-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: 'stable'
+  #         cache: true
+
+  #     - name: Install dependencies
+  #       run: flutter pub get
+
+  #     - name: Run tests
+  #       run: flutter test -d windows integration_test/app_test.dart
