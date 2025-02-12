@@ -1,17 +1,28 @@
-name: build docker image
+name: build app
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, reopened, synchronize, closed]
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        description: environment to deploy to
+        required: true
+    secrets:
+      env_file:
+        required: true
+      KEY_STORE:
+        required: true
+      KEY_PROPERTIES:
+        required: true
+      FASTLANE_SUPPLY:
+        required: true
 
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
+  COMMENT_MESSAGE: "Successfully deployed to ${{ inputs.environment }}! :rocket:"
 
 jobs:
   build:
@@ -37,6 +48,7 @@ jobs:
           cache: true
       - uses: ruby/setup-ruby@v1
         with:
+          ruby-version: "3.2.2"
           bundler-cache: true
 
       - name: Create env file
@@ -51,17 +63,13 @@ jobs:
         run: echo "${{ secrets.env_file }}" >> .env.${{ inputs.environment == 'staging' && 'dev' || 'prod' }}
 
       - name: Decode secret file
-        env:
-          UPLOAD_KEY_BASE64: ${{ secrets.KEY_STORE }}
-        run: |
-          echo $UPLOAD_KEY_BASE64 | base64 --decode > upload-keystore.jks
-          mv upload-keystore.jks android/
+        run: echo "${{ secrets.KEY_STORE }}" | base64 --decode > android/upload-keystore.jks
+
       - name: Include key properties
-        env:
-          KEY_PROPERTIES: ${{ secrets.KEY_PROPERTIES }}
-        run: |
-          echo $KEY_PROPERTIES > key.properties
-          mv key.properties android/
+        run: echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
+
+      - name: Include fastlane supply file
+        run: echo "${{ secrets.FASTLANE_SUPPLY }}" | base64 --decode > fastlane-supply.json
 
       - name: Clear cache
         run: flutter clean
@@ -69,7 +77,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Run Bundle Install
+        run: |
+          cd android
+          bundle install
+
       - name: Run Fastlane
         run: |
           cd android
-          bundle exec fastlane buildDevApk
+          bundle exec fastlane firebaseDistribute env:${{ inputs.environment }}

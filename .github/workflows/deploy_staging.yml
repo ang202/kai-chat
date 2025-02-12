@@ -1,8 +1,10 @@
-name: deploy production app
+name: deploy staging app
 
 on:
   push:
-    branches: [production]
+    branches: [staging]
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
 
 jobs:
   test:
@@ -21,10 +23,10 @@ jobs:
       KEY_PROPERTIES: ${{ secrets.KEY_PROPERTIES }}
       FASTLANE_SUPPLY: ${{ secrets.FASTLANE_SUPPLY }}
       env_file: |
-        API_URL=${{ secrets.PRODUCTION_API_URL }}
+        API_URL=${{ secrets.STAGING_API_URL }}
     permissions:
       contents: read
-      packages: write # Ensure this is set correctly
+      packages: write
       id-token: write
     with:
-      environment: production
+      environment: staging
