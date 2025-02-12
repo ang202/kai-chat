@@ -63,48 +63,57 @@ platform :android do
   desc "Publishing apk to Firebase Distribution"
   lane :firebaseDistribute do |options|
     ENV["GOOGLE_APPLICATION_CREDENTIALS"] = "../fastlane-supply.json"
-    output_json_path = "./app/google-services.json"
-    build_output = load_json(json_path: output_json_path)
-    androidAppId = build_output["client"][0]["client_info"]["mobilesdk_app_id"]
+    case options[:env]
+    when "staging"
+      androidAppId = "1:688834453847:android:8060a94de1ca9e36711e12"
+    when "production"
+      androidAppId = "1:688834453847:android:5a503b147b5541b1711e12"
+    end
     UI.message("Android app id: #{androidAppId}")
 
     # Prompt error if file not found
     UI.user_error!("You need to include google-service.json and fastlane-supply.json") if(androidAppId.nil? || ENV["GOOGLE_APPLICATION_CREDENTIALS"].nil?)
     
     # Proceed with the code if no error
-    prodApk(isMove: false)
+    case options[:env]
+    when "staging"
+      devApk
+    when "production"
+      prodApk
+    end
+    
     firebase_app_distribution(
       app: androidAppId,
       service_credentials_file: ENV["GOOGLE_APPLICATION_CREDENTIALS"],
       groups: (!options[:group].nil? && !options[:group].empty?) ? options[:group] : "",
       release_notes: (!options[:notes].nil? && !options[:notes].empty?) ? options[:notes] : "",
       android_artifact_type: "APK",
-      android_artifact_path: "../build/app/outputs/flutter-apk/app-arm64-v8a-prod-release.apk",
+      android_artifact_path: "../build/app/outputs/flutter-apk/app.apk",
       debug: true
     )
   end
 
   desc "Building a development apk"
-  private_lane :devApk do
+  private_lane :devApk do |options|
     sh("flutter build apk --obfuscate --split-debug-info=symbols --debug --flavor dev -t lib/main_dev.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
-    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-dev-debug.apk ~/Downloads/dev.apk")
+    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-dev-debug.apk ../../build/app/outputs/flutter-apk/app.apk")
   end
   
   desc "Building a SIT apk"
-  private_lane :sitApk do
+  private_lane :sitApk do |options|
     sh("flutter build apk --profile --flavor sit -t lib/main_sit.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
-    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-sit-profile.apk ~/Downloads/sit.apk")
+    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-sit-profile.apk ../../build/app/outputs/flutter-apk/app.apk")
   end
 
   desc "Building a UAT apk"
-  private_lane :uatApk do
+  private_lane :uatApk do |options|
     sh("flutter build apk --profile --flavor uat -t lib/main_uat.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
-    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-uat-profile.apk ~/Downloads/uat.apk")
+    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-uat-profile.apk ../../build/app/outputs/flutter-apk/app.apk")
   end
 
   desc "Building a production apk"
   private_lane :prodApk do |options|
     sh("flutter build apk --obfuscate --split-debug-info=symbols --release --flavor prod -t lib/main_prod.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
-    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-prod-release.apk ~/Downloads/release.apk") if (options[:isMove])
+    sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-prod-release.apk ../../build/app/outputs/flutter-apk/app.apk")
   end
 end
