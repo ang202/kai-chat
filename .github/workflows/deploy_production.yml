@@ -1,0 +1,40 @@
+name: deploy production app
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+env:
+  COMMENT_MESSAGE: "Successfully deployed! :rocket:"
+
+jobs:
+  test:
+    uses: ./.github/workflows/ci_test.yml
+    secrets:
+      env_file: |
+        API_URL=https://example.com
+    with:
+      environment: test
+
+  build:
+    uses: ./.github/workflows/build_app.yml
+    needs: [test]
+    secrets:
+      env_file: |
+        API_URL=${{ secrets.PRODUCTION_API_URL }}
+    with:
+      environment: production
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [test, build]
+    environment: production
+    steps:
+      - name: Check App
+        run: ls -la build/app/outputs/apk
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          comment_tag: execution
+          message: |
+            ${{ env.COMMENT_MESSAGE }}
