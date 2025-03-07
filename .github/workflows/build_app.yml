@@ -56,7 +56,7 @@ jobs:
           path: |
             ~/.pub-cache
             ${{ github.workspace }}/.dart_tool
-          key: flutter-pub-${{ runner.os }}-${{ github.event.inputs.environment }}-${{ hashFiles('pubspec.yaml') }}
+          key: flutter-pub-${{ runner.os }}-${{ inputs.environment }}-${{ hashFiles('pubspec.yaml') }}
           restore-keys: flutter-pub-${{ runner.os }}-
 
       - name: Cache Gradle Files (For Android Builds)
@@ -65,7 +65,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ github.event.inputs.environment }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: gradle-${{ runner.os }}-${{ inputs.environment }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-${{ runner.os }}-
 
       - uses: ruby/setup-ruby@v1
