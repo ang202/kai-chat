@@ -42,7 +42,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-.fvm/flutter_sdk
 .env.dev
 .env.prod
 .env.uat
@@ -50,3 +49,7 @@ fastlane-supply.json
 .jks
 report.xml
 *.p8
+
+# FVM Version Cache
+.fvm/
+.cxx/

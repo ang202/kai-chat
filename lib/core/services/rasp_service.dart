@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freerasp/freerasp.dart';
-import 'package:kai_chat/core/values/app_colors.dart';
 
 class RaspService {
   static void triggerToast({String? error}) {
-    Fluttertoast.showToast(
-        msg: error ?? "",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: AppColors.gray900,
-        textColor: AppColors.white,
-        fontSize: 16.0);
+    debugPrint("Rasp Error: $error");
   }
 
   static Future<void> triggerRasp() async {

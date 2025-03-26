@@ -95,7 +95,13 @@ platform :android do
 
   desc "Building a development apk"
   private_lane :devApk do |options|
-    sh("flutter build apk --obfuscate --split-debug-info=symbols --debug --flavor dev -t lib/main_dev.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+    build_name = options[:buildName]
+    build_number = options[:buildNumber]
+
+    flutter_command = "flutter build apk --obfuscate --split-debug-info=symbols --debug --flavor dev -t lib/main_dev.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64"
+
+    flutter_command += " --build-name #{build_name}" if build_name
+    flutter_command += " --build-number #{build_number}" if build_number
     sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-dev-debug.apk ../../build/app/outputs/flutter-apk/app.apk")
   end
   

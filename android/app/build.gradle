@@ -35,7 +35,7 @@ def keystoreProperties = new Properties()
 
 android {
     namespace "com.kai.chat"
-    compileSdkVersion 34
+    compileSdkVersion 35
     ndkVersion flutter.ndkVersion
 
     compileOptions {
