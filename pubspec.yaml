@@ -69,6 +69,8 @@ dependencies:
 
   permission_handler: ^11.3.1
 
+  nfc_manager: ^3.5.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

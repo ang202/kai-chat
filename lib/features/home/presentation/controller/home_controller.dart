@@ -4,6 +4,8 @@ import 'package:kai_chat/core/base/base_controller.dart';
 import 'package:kai_chat/core/services/firebase_messaging_service.dart';
 import 'package:kai_chat/features/home/domain/model/chat_request.dart';
 import 'package:kai_chat/features/home/domain/repository/chat_repository.dart';
+import 'package:nfc_manager/nfc_manager.dart';
+import 'package:nfc_manager/platform_tags.dart';
 
 class HomeController extends BaseController {
   final ChatRepository chatRepository = Get.find();
@@ -33,6 +35,28 @@ class HomeController extends BaseController {
             listKey.currentState?.insertItem(0);
           },
           onError: (err) => setError(err));
+    }
+  }
+
+  void triggerNFC() async {
+    debugPrint("Trigger");
+
+    bool isAvailable = await NfcManager.instance.isAvailable();
+    debugPrint("Tag ${isAvailable}");
+
+    if (isAvailable) {
+      NfcManager.instance.startSession(
+        onDiscovered: (NfcTag tag) async {
+          final isoDep = IsoDep.from(tag);
+          debugPrint(
+              "TagGet ${tag.data.toString()} ${Ndef.from(tag)?.additionalData} ${Ndef.from(tag)?.cachedMessage}");
+          // Do something with an NfcTag instance.
+          NfcManager.instance.stopSession();
+        },
+        onError: (error) async {
+          debugPrint("Tag Errpr ${error}");
+        },
+      );
     }
   }
 }

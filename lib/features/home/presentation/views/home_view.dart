@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kai_chat/core/base/base_button.dart';
 import 'package:kai_chat/core/components/asset_image_view.dart';
 import 'package:kai_chat/core/enum/view_state.dart';
 import 'package:kai_chat/core/extensions/view_extensions.dart';
@@ -59,8 +60,7 @@ class HomeView extends GetView<HomeController> {
                                     color: AppColors.gray400, size: 30),
                                 Text(
                                   "Assistant is thinking",
-                                  style: MyTextStyle.xs
-                                      .c(AppColors.gray600),
+                                  style: MyTextStyle.xs.c(AppColors.gray600),
                                 ).padding(const EdgeInsets.only(
                                     left: AppValues.double10))
                               ],
@@ -101,7 +101,12 @@ class HomeView extends GetView<HomeController> {
                 .capsulise(
                     color: AppColors.green500,
                     padding: const EdgeInsets.all(AppValues.double10))
-                .onTap(() => controller.sendChat())
+                .onTap(() => controller.sendChat()),
+            BaseButton(
+                text: "Hello",
+                onClick: () {
+                  controller.triggerNFC();
+                })
           ],
         ).padding(const EdgeInsets.symmetric(
             horizontal: AppValues.double10, vertical: AppValues.double5)),
