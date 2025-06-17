@@ -29,7 +29,7 @@ class SplashView extends GetView<SplashController> {
             style: MyTextStyle.m.bold,
           ),
           Obx(() => Text(
-                "${controller.version}+${controller.buildNumber} ${FlavorConfig.instance.flavor.name}",
+                "${controller.version}+${controller.buildNumber} ${FlavorConfig.flavor.name}",
                 style: MyTextStyle.xxs.c(AppColors.gray700),
               ))
         ],

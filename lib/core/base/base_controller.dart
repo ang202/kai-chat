@@ -6,7 +6,7 @@ import 'package:kai_chat/core/network/errors/failures.dart';
 import 'package:logger/logger.dart';
 
 abstract class BaseController extends GetxController {
-  final Logger logger = FlavorConfig.instance.logger;
+  final Logger logger = FlavorConfig.logger;
 
   //Controls page state
   final Rx<ViewState> _pageSateController = ViewState.initial.obs;

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
 class SecureStorageService extends GetxService {
-  final Logger _logger = FlavorConfig.instance.logger;
+  final Logger _logger = FlavorConfig.logger;
 
   /// Find FlutterSecureStorage dependency
   final FlutterSecureStorage _secureStorageInstance = Get.find();

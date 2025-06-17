@@ -2,10 +2,16 @@ import 'package:kai_chat/core/network/errors/extra_model.dart';
 
 abstract class BaseFailure {
   final String message;
-  final int? statusCode;
+  final String? statusCode;
+  final int? responseCode;
   final ExtraModel? extra;
 
-  BaseFailure({required this.message, this.statusCode, this.extra});
+  BaseFailure({
+    required this.message,
+    this.statusCode,
+    this.responseCode,
+    this.extra,
+  });
 
   String get detailedMessage;
 
@@ -14,9 +20,17 @@ abstract class BaseFailure {
 }
 
 class ApiFailure extends BaseFailure {
-  ApiFailure(
-      {required String message, required int? statusCode, ExtraModel? extra})
-      : super(message: message, statusCode: statusCode, extra: extra);
+  ApiFailure({
+    required String message,
+    required String? statusCode,
+    required int? responseCode,
+    ExtraModel? extra,
+  }) : super(
+          message: message,
+          statusCode: statusCode,
+          responseCode: responseCode,
+          extra: extra,
+        );
 
   @override
   // String get detailedMessage => '$message \nStatusCode:[$statusCode]';
@@ -24,8 +38,15 @@ class ApiFailure extends BaseFailure {
 }
 
 class GeneralFailure extends BaseFailure {
-  GeneralFailure({required String message, int? statusCode})
-      : super(message: message, statusCode: statusCode);
+  GeneralFailure({
+    required String message,
+    String? statusCode,
+    int? responseCode,
+  }) : super(
+          message: message,
+          statusCode: statusCode,
+          responseCode: responseCode,
+        );
 
   @override
   // String get detailedMessage => '$message \nStatusCode:[$statusCode]';

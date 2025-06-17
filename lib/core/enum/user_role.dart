@@ -21,9 +21,7 @@ extension UserRoleUtil on UserRole {
         return 'ROLE_MERCHANT_MANAGER';
       case UserRole.merchantCashier:
         return 'ROLE_MERCHANT_CASHIER';
-      default:
-        return '';
-    }
+      }
   }
 
   String get name => getName(this);

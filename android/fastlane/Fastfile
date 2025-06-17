@@ -98,7 +98,7 @@ platform :android do
     build_name = options[:buildName]
     build_number = options[:buildNumber]
 
-    flutter_command = "flutter build apk --obfuscate --split-debug-info=symbols --debug --flavor dev -t lib/main_dev.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64"
+    sh("flutter build apk --obfuscate --split-debug-info=symbols --debug --flavor dev --dart-define=FLAVOR=dev --split-per-abi --target-platform android-arm,android-arm64,android-x64")
 
     flutter_command += " --build-name #{build_name}" if build_name
     flutter_command += " --build-number #{build_number}" if build_number
@@ -107,19 +107,19 @@ platform :android do
   
   desc "Building a SIT apk"
   private_lane :sitApk do |options|
-    sh("flutter build apk --profile --flavor sit -t lib/main_sit.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+    sh("flutter build apk --profile --flavor sit --dart-define=FLAVOR=sit --split-per-abi --target-platform android-arm,android-arm64,android-x64")
     sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-sit-profile.apk ../../build/app/outputs/flutter-apk/app.apk")
   end
 
   desc "Building a UAT apk"
   private_lane :uatApk do |options|
-    sh("flutter build apk --profile --flavor uat -t lib/main_uat.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+    sh("flutter build apk --profile --flavor uat --dart-define=FLAVOR=uat --split-per-abi --target-platform android-arm,android-arm64,android-x64")
     sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-uat-profile.apk ../../build/app/outputs/flutter-apk/app.apk")
   end
 
   desc "Building a production apk"
   private_lane :prodApk do |options|
-    sh("flutter build apk --obfuscate --split-debug-info=symbols --release --flavor prod -t lib/main_prod.dart --split-per-abi --target-platform android-arm,android-arm64,android-x64")
+    sh("flutter build apk --obfuscate --split-debug-info=symbols --release --flavor prod --dart-define=FLAVOR=prod --split-per-abi --target-platform android-arm,android-arm64,android-x64")
     sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-prod-release.apk ../../build/app/outputs/flutter-apk/app.apk")
   end
 end

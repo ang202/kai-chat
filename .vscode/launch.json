@@ -3,57 +3,62 @@
   "configurations": [
     {
       "name": "DEV-Flavor",
-      "program": "lib/main_dev.dart",
+      "program": "lib/main.dart",
       "request": "launch",
       "flutterMode": "debug",
       "type": "dart",
       "args": [
         "--flavor",
-        "dev"
+        "dev",
+        "--dart-define=FLAVOR=dev"
       ],
     },
     {
       "name": "DEV-Release",
-      "program": "lib/main_dev.dart",
+      "program": "lib/main.dart",
       "request": "launch",
       "flutterMode": "release",
       "type": "dart",
       "args": [
         "--flavor",
-        "dev"
+        "dev",
+        "--dart-define=FLAVOR=dev"
       ],
     },
     {
       "name": "UAT-Flavor",
-      "program": "lib/main_uat.dart",
+      "program": "lib/main.dart",
       "request": "launch",
       "flutterMode": "debug",
       "type": "dart",
       "args": [
         "--flavor",
-        "uat"
+        "uat",
+        "--dart-define=FLAVOR=uat"
       ],
     },
     {
       "name": "UAT-release",
-      "program": "lib/main_uat.dart",
+      "program": "lib/main.dart",
       "request": "launch",
       "flutterMode": "release",
       "type": "dart",
       "args": [
         "--flavor",
-        "uat"
+        "uat",
+        "--dart-define=FLAVOR=uat"
       ],
     },
     {
       "name": "PROD-Flavor",
-      "program": "lib/main_prod.dart",
+      "program": "lib/main.dart",
       "request": "launch",
       "flutterMode": "debug",
       "type": "dart",
       "args": [
         "--flavor",
-        "prod"
+        "prod",
+        "--dart-define=FLAVOR=prod"
       ],
     },
   ]

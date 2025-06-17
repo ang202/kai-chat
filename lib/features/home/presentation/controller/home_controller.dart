@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kai_chat/core/base/base_controller.dart';
-import 'package:kai_chat/core/services/firebase_messaging_service.dart';
 import 'package:kai_chat/features/home/domain/model/chat_request.dart';
 import 'package:kai_chat/features/home/domain/repository/chat_repository.dart';
 import 'package:nfc_manager/nfc_manager.dart';
@@ -12,12 +11,6 @@ class HomeController extends BaseController {
   final TextEditingController textController = TextEditingController();
   final RxList<Message> messageList = <Message>[].obs;
   final listKey = GlobalKey<AnimatedListState>();
-
-  @override
-  void onInit() {
-    Get.put(FirebaseMessagingService(), permanent: true);
-    super.onInit();
-  }
 
   Future<void> sendChat() async {
     final message = textController.text;

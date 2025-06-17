@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:isolate';
-import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,8 +8,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:kai_chat/core/base/base_bottom_sheet.dart';
 import 'package:kai_chat/core/base/base_button.dart';
+import 'package:kai_chat/core/base/main_controller.dart';
 import 'package:kai_chat/core/extensions/view_extensions.dart';
-import 'package:kai_chat/core/routes/routing.dart';
+import 'package:kai_chat/core/repositories/local_repository.dart';
 import 'package:kai_chat/core/values/app_text_style.dart';
 import 'package:kai_chat/core/values/app_values.dart';
 import 'package:kai_chat/firebase_options.dart';
@@ -20,18 +19,20 @@ import 'package:permission_handler/permission_handler.dart';
 // Top Level so Dart runtime can access
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  final SendPort? sendPort =
-      IsolateNameServer.lookupPortByName('background_message_port');
+  // final SendPort? sendPort =
+  // IsolateNameServer.lookupPortByName('background_message_port');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   debugPrint('Handling a background message ${message.messageId}');
   debugPrint('Background message ${message.toMap()}');
-  sendPort?.send(message.toMap());
+  // sendPort?.send(message.toMap());
 }
 
 class FirebaseMessagingService extends GetxService {
   late AndroidNotificationChannel channel;
   bool isFlutterLocalNotificationsInitialized = false;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  final LocalRepository localRepository = Get.find();
+  final MainController mainController = Get.find();
 
   @override
   void onInit() async {
@@ -83,13 +84,14 @@ class FirebaseMessagingService extends GetxService {
     debugPrint("Show Flutter notification ${message.toMap()}");
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
+    Map<String, dynamic> data = message.data;
+
     if (notification != null && android != null && !kIsWeb) {
       flutterLocalNotificationsPlugin.show(
         notification.hashCode,
         notification.title,
         notification.body,
-        // TODO: Remove test data
-        payload: '{"title":"Test","body":"Test","extra":{"id":"123123"}}',
+        payload: jsonEncode(data),
         const NotificationDetails(
           android: AndroidNotificationDetails(
             "high_importance_channel",
@@ -113,26 +115,39 @@ class FirebaseMessagingService extends GetxService {
 
     // Handle the initial message
     if (initialMessage != null) {
-      _handleMessage(initialMessage);
+      _appInitCheck(initialMessage);
     }
 
     // Handle background interaction via Stream listener
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+    FirebaseMessaging.onMessageOpenedApp.listen(_appInitCheck);
+  }
+
+  void _appInitCheck(RemoteMessage message) async {
+    final bool isLoggedIn = await mainController.authCheckCompleter.future;
+
+    if (isLoggedIn) {
+      _handleMessage(message);
+    }
   }
 
   // Handle ontap on local notification
   void _handleMessage(RemoteMessage message) {
-    debugPrint("On click message, ${message.toMap()}");
-    // TODO: Remove test data
-    Map<String, dynamic>? payload =
-        jsonDecode('{"title":"Test","body":"Test","extra":{"id":"123123"}}');
-    _handleRedirection(payload);
+    RemoteNotification? notification = message.notification;
+    Map<String, dynamic> data = message.data;
+    debugPrint('==================== data: $data');
+
+    if (notification != null) {
+      _handleRedirection(data);
+    } else {
+      debugPrint("Notification is null");
+    }
   }
 
   void _handleRedirection(Map<String, dynamic>? data) {
-    debugPrint("Redirection data ${data}");
-
-    Get.toNamed(Routes.chat, arguments: data);
+    debugPrint("Redirection data $data");
+    debugPrint("Redirection==============================");
+    // TODO: Redirect to the page
+    // Get.toNamed(Routes.transactionConfirmation, arguments: data);
   }
 
   // Check Notification Permission for Android 13 above
@@ -143,8 +158,6 @@ class FirebaseMessagingService extends GetxService {
       carPlay: true,
       criticalAlert: true,
     );
-    debugPrint(
-        "Notification Setting ${settings.authorizationStatus} ${settings.criticalAlert}");
     if (settings.authorizationStatus != AuthorizationStatus.authorized) {
       BaseBottomSheet.show(
           child: PopScope(
@@ -154,7 +167,7 @@ class FirebaseMessagingService extends GetxService {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Push Notification is required for better user experience!",
+                    "Push Notification Permission Required",
                     style: MyTextStyle.l.bold,
                   ),
                   const Spacer(),
@@ -172,18 +185,29 @@ class FirebaseMessagingService extends GetxService {
   }
 
   // Register Isolate Receiver Port
-  void setupIsolatePort() {
-    final ReceivePort receivePort = ReceivePort();
-    IsolateNameServer.registerPortWithName(
-      receivePort.sendPort,
-      'background_message_port',
-    );
-    receivePort.listen((dynamic message) async {
-      debugPrint(
-          "Check flutter notification $isFlutterLocalNotificationsInitialized");
-      await flutterLocalNotificationsPlugin.cancelAll();
-      showFlutterNotification(RemoteMessage.fromMap(message));
-    });
+  // void setupIsolatePort() {
+  //   final ReceivePort receivePort = ReceivePort();
+  //   IsolateNameServer.registerPortWithName(
+  //     receivePort.sendPort,
+  //     'background_message_port',
+  //   );
+  //   receivePort.listen((dynamic message) async {
+  //     debugPrint(
+  //         "Check flutter notification $isFlutterLocalNotificationsInitialized");
+  //     await flutterLocalNotificationsPlugin.cancelAll();
+  //     // showFlutterN otification(RemoteMessage.fromMap(message));
+  //   });
+  // }
+
+  void _handleForegroundMessage(RemoteMessage message) {
+    debugPrint("Foreground message received: ${message.toMap()}");
+    final String action = message.data["MobileNotification"] ?? '';
+
+    if (action == "HandleMessage") {
+      _handleMessage(message);
+    } else {
+      showFlutterNotification(message);
+    }
   }
 
   Future<void> init() async {
@@ -191,12 +215,13 @@ class FirebaseMessagingService extends GetxService {
       // Initialize local notifications
       await setupFlutterNotifications();
 
-      // Setup interaction handling
+    // Setup interaction handling
       await setupInteractedMessage();
 
       FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
-        debugPrint("FCM Token ${fcmToken}");
-      }).onError((err) {});
+        debugPrint("FCM TOKEN REFRESH: $fcmToken");
+        // mainController.deviceVerification();
+      }).onError((err) => debugPrint("Error on token refresh: $err"));
 
       debugPrint(
           "FCM GET Token ${await FirebaseMessaging.instance.getToken()}");
@@ -205,10 +230,10 @@ class FirebaseMessagingService extends GetxService {
       FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
       // Setup Isolate Port to listen to top-level pragma changes
-      setupIsolatePort();
+      // setupIsolatePort();
 
       // Listen for foreground messages
-      FirebaseMessaging.onMessage.listen(showFlutterNotification);
+      FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
     }
   }
 }

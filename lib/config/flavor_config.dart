@@ -6,49 +6,68 @@ enum Flavor {
   uat,
   dev,
   prod,
+  sit,
 }
 
 class FlavorConfig {
-  final Flavor flavor;
-  final String? name;
-  final Logger logger;
-  static late FlavorConfig _instance;
+  static const envFlavor = String.fromEnvironment("FLAVOR");
+  static Logger logger = Logger(
+    printer: PrettyPrinter(
+      methodCount: AppValues.loggerMethodCount,
+      // number of method calls to be displayed
+      errorMethodCount: AppValues.loggerErrorMethodCount,
+      // number of method calls if stacktrace is provided
+      lineLength: AppValues.loggerLineLength,
+      // width of the output
+      colors: true,
+      // Colorful log messages
+      printEmojis: true,
+      // Print an emoji for each log message
+      dateTimeFormat: DateTimeFormat
+          .dateAndTime, // Should each log print contain a timestamp
+    ),
+  );
 
-  factory FlavorConfig({required Flavor flavor, required String name, logger}) {
-    logger = Logger(
-      printer: PrettyPrinter(
-        methodCount: AppValues.loggerMethodCount,
-        // number of method calls to be displayed
-        errorMethodCount: AppValues.loggerErrorMethodCount,
-        // number of method calls if stacktrace is provided
-        lineLength: AppValues.loggerLineLength,
-        // width of the output
-        colors: true,
-        // Colorful log messages
-        printEmojis: true,
-        // Print an emoji for each log message
-        dateTimeFormat: DateTimeFormat
-            .dateAndTime, // Should each log print contain a timestamp
-      ),
-    );
-
-    return _instance = FlavorConfig._internal(flavor, name, logger);
+  static Flavor get flavor {
+    switch (envFlavor) {
+      case "dev":
+        return Flavor.dev;
+      case "uat":
+        return Flavor.uat;
+      case "prod":
+        return Flavor.prod;
+      case "sit":
+        return Flavor.sit;
+      default:
+        return Flavor.dev;
+    }
   }
 
-  FlavorConfig._internal(this.flavor, this.name, this.logger);
+  static String get name {
+    switch (envFlavor) {
+      case "dev":
+        return "[DEV] Kai Chat";
+      case "uat":
+        return "[UAT] Kai Chat";
+      case "prod":
+        return "Kai Chat";
+      case "sit":
+        return "[SIT] Kai Chat";
+      default:
+        return "[DEV] Kai Chat";
+    }
+  }
 
-  static FlavorConfig get instance => _instance;
+  static String get title => name;
 
-  static String get title => instance.name ?? '';
+  static bool get isUAT => flavor == Flavor.uat;
 
-  static bool get isUAT => _instance.flavor == Flavor.uat;
+  static bool get isDevelopment => flavor == Flavor.dev;
 
-  static bool get isDevelopment => _instance.flavor == Flavor.dev;
-
-  static bool get isProduction => _instance.flavor == Flavor.prod;
+  static bool get isProduction => flavor == Flavor.prod;
 
   static String get fileName {
-    switch (instance.flavor) {
+    switch (flavor) {
       case Flavor.dev:
         return '.env.dev';
       case Flavor.prod:

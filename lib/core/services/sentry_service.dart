@@ -11,7 +11,7 @@ class SentryService extends GetxService {
       {required Object error,
       required StackTrace stackTrace,
       required bool shouldReportError}) async {
-    final Logger logger = FlavorConfig.instance.logger;
+    final Logger logger = FlavorConfig.logger;
 
     final LocalRepository localRepository = Get.find();
 

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:get/get.dart';
@@ -5,6 +6,7 @@ import 'package:kai_chat/core/repositories/local_repository.dart';
 
 class MainController extends GetxController {
   final LocalRepository localRepository = Get.find();
+  final Completer<bool> authCheckCompleter = Completer<bool>();
 
   // Handle overall app state
   void updateLocale() async {

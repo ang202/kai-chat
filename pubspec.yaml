@@ -71,6 +71,12 @@ dependencies:
 
   nfc_manager: ^3.5.0
 
+  # Get device info
+  device_info_plus: ^11.1.0
+
+  # Get android id
+  android_id: "^0.4.0"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

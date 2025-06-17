@@ -12,7 +12,7 @@ extension DioResponseExtension<T> on Future<Response<T>> {
   Future handleResponse(
       {required Function(TupleResponse data) onSuccess,
       required Function(BaseFailure) onError}) async {
-    final Logger logger = FlavorConfig.instance.logger;
+    final Logger logger = FlavorConfig.logger;
     final LocalRepository localRepository = getx.Get.find();
     try {
       final Response response = await this;
@@ -33,7 +33,7 @@ extension DioResponseExtension<T> on Future<Response<T>> {
             )
           : null;
       final BaseFailure exception =
-          ErrorHandler().handleDioError(dioError, stackTrace);
+          ErrorHandler.handleDioError(dioError, stackTrace);
       logger.d(
           '!!! Throwing error from API: Exception: ${exception.runtimeType}, Status Code: ${exception.statusCode}, Message: ${exception.message} !!!');
       onError.call(exception);
