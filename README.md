@@ -148,6 +148,20 @@ Or you can run unit test:
 flutter test test/main_test.dart
 ```
 
+## Setup Flutterfire
+
+**You can replace your own flavor name**
+```
+flutterfire config \
+      --project=kai-chat \
+      --out=lib/firebase_options_dev.dart \
+      --ios-bundle-id=com.kai.chat.dev \
+      --ios-out=ios/flavors/dev/GoogleService-Info.plist \
+      --android-package-name=com.kai.chat.dev \
+      --android-out=android/app/src/dev/google-services.json
+
+```
+
 ## Learn more about Flutter
 
 This project is a starting point for a Flutter application.
