@@ -6,6 +6,11 @@ pipeline {
     }
     
     stages {
+        stage('Clean') {
+            steps {
+                cleanWs()   // wipes the workspace before continuing
+            }
+        }
         stage('Get Git Branch') { 
             steps {
                 script {
