@@ -77,9 +77,9 @@ platform :android do
     # Proceed with the code if no error
     case options[:env]
     when "dev"
-      devApk(options)
+      devApk(buildName: options[:buildName], buildNumber: options[:buildNumber])
     when "prod"
-      prodApk(options)
+      prodApk(buildName: options[:buildName], buildNumber: options[:buildNumber])
     end
     
     firebase_app_distribution(
@@ -97,11 +97,10 @@ platform :android do
   private_lane :devApk do |options|
     build_name = options[:buildName]
     build_number = options[:buildNumber]
-
-    sh("flutter build apk --obfuscate --split-debug-info=symbols --debug --flavor dev --dart-define=FLAVOR=dev --split-per-abi --target-platform android-arm,android-arm64,android-x64")
-
+    flutter_command = "flutter build apk --debug --flavor dev --dart-define=FLAVOR=dev --split-per-abi --target-platform android-arm,android-arm64,android-x64"
     flutter_command += " --build-name #{build_name}" if build_name
     flutter_command += " --build-number #{build_number}" if build_number
+    sh(flutter_command)
     sh("mv ../../build/app/outputs/flutter-apk/app-arm64-v8a-dev-debug.apk ../../build/app/outputs/flutter-apk/app.apk")
   end
   
