@@ -53,12 +53,17 @@ pipeline {
 
         stage('Start build tag app') {
             when {
-                buildingTag()
+                expression {
+                    // Only run this stage if commit has a tag
+                    sh(script: "git describe --tags --exact-match || true", returnStdout: true).trim()
+                }
             }
             steps {
                 script {
-                    echo "Building from tag: ${env.GIT_TAG}"
-                    def tag = env.GIT_TAG
+                    def tag = sh(
+                        script: "git describe --tags --exact-match",
+                        returnStdout: true
+                    ).trim()
 
                     echo "Raw tag: ${tag}"
 
