@@ -6,11 +6,7 @@ pipeline {
     }
     
     stages {
-        stage('Clean') {
-            steps {
-                cleanWs()   // wipes the workspace before continuing
-            }
-        }
+        
         stage('Get Git Branch') { 
             steps {
                 script {
@@ -108,6 +104,7 @@ pipeline {
     post {
         always {
             echo 'Pipeline completed.'
+            cleanWs()   // Clean workspace after build
         }
     }
 }
