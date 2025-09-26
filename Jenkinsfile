@@ -27,6 +27,13 @@ pipeline {
                         cp \$KEYSTORE_FILE android/upload-keystore.jks
                         """
                     }
+
+                    withCredentials([file(credentialsId: 'kai-chat-service-account', variable: 'SERVICE_ACCOUNT_FILE')]) {
+                        sh """
+                        cp \$SERVICE_ACCOUNT_FILE fastlane-supply.json
+                        """
+                    }
+
                     // Create environment files and key properties file
                     sh """
                     touch .env.dev
