@@ -68,8 +68,9 @@ pipeline {
                     echo "Raw tag: ${tag}"
 
                     // Regex: 1.0.0-dev.1 → groups: (1.0.0) (dev) (1)
-                    def matcher = tag = ~/(\d+\.\d+\.\d+)-(\w+)\.(\d+)/
+                    def pattern = ~/(\d+\.\d+\.\d+)-(\w+)\.(\d+)/
 
+                    def matcher = pattern.matcher(tag)
                     if (!matcher.matches()) {
                         error "Tag format invalid: ${tag}"
                     }
