@@ -49,12 +49,40 @@ pipeline {
                 }
             }
         }
+
+        stage('Start build tag app') {
+            when {
+                buildingTag()
+            }
+            steps {
+                echo "Building from tag: ${env.GIT_TAG}"
+                def tag = env.GIT_TAG
+
+                echo "Raw tag: ${tag}"
+
+                // Regex: 1.0.0-dev.1 → groups: (1.0.0) (dev) (1)
+                def matcher = tag = ~/(\d+\.\d+\.\d+)-(\w+)\.(\d+)/
+
+                if (!matcher.matches()) {
+                    error "Tag format invalid: ${tag}"
+                }
+
+                def baseVersion = matcher[0][1] // 1.0.0
+                def environment = matcher[0][2] // dev
+                def buildNum = matcher[0][3] // 1
+
+                echo "Base version   = ${baseVersion}"
+                echo "Environment    = ${environment}"
+                echo "Build number   = ${buildNum}"
+            }
+        }
         
         stage('Start build app') {
             when {
-                expression { env.GIT_BRANCH == "origin/test/jenkins" }
+                expression { env.GIT_BRANCH == "origin/test/jenkins" || env.GIT_BRANCH == "test/jenkins" }
             }
             steps {
+                echo "Current Git Tag: ${env.GIT_BRANCH}"
                 script {
                     // Run Flutter commands and Fastlane
                     sh """
