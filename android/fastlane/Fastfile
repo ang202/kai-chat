@@ -64,9 +64,9 @@ platform :android do
   lane :firebaseDistribute do |options|
     ENV["GOOGLE_APPLICATION_CREDENTIALS"] = "../fastlane-supply.json"
     case options[:env]
-    when "staging"
+    when "dev"
       androidAppId = "1:688834453847:android:8060a94de1ca9e36711e12"
-    when "production"
+    when "prod"
       androidAppId = "1:688834453847:android:5a503b147b5541b1711e12"
     end
     UI.message("Android app id: #{androidAppId}")
@@ -76,10 +76,10 @@ platform :android do
     
     # Proceed with the code if no error
     case options[:env]
-    when "staging"
-      devApk
-    when "production"
-      prodApk
+    when "dev"
+      devApk(options)
+    when "prod"
+      prodApk(options)
     end
     
     firebase_app_distribution(

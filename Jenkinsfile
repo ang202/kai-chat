@@ -3,6 +3,7 @@ pipeline {
     
     environment {
         PATH = "/opt/homebrew/bin:$PATH" // Add Fastlane path to the environment
+        TAG = sh(script: "git describe --tags --exact-match || true", returnStdout: true).trim()
     }
     
     stages {
@@ -51,19 +52,16 @@ pipeline {
             }
         }
 
-        stage('Start build tag app') {
+        stage('Start setup version') {
             when {
                 expression {
                     // Only run this stage if commit has a tag
-                    sh(script: "git describe --tags --exact-match || true", returnStdout: true).trim()
+                    return env.TAG?.trim()
                 }
             }
             steps {
                 script {
-                    def tag = sh(
-                        script: "git describe --tags --exact-match",
-                        returnStdout: true
-                    ).trim()
+                    def tag = env.TAG
 
                     echo "Raw tag: ${tag}"
 
@@ -79,16 +77,16 @@ pipeline {
                     def environment = matcher[0][2] // dev
                     def buildNum = matcher[0][3] // 1
 
-                    echo "Base version   = ${baseVersion}"
-                    echo "Environment    = ${environment}"
-                    echo "Build number   = ${buildNum}"
+                    env.BASE_VERSION = baseVersion
+                    env.ENVIRONMENT = environment
+                    env.BUILD_NUM = buildNum
                 }
             }
         }
         
         stage('Start build app') {
             when {
-                expression { env.GIT_BRANCH == "origin/test/jenkins" || env.GIT_BRANCH == "test/jenkins" }
+                expression { env.BASE_VERSION && env.ENVIRONMENT && env.BUILD_NUM}
             }
             steps {
                 echo "Current Git Tag: ${env.GIT_BRANCH}"
@@ -97,10 +95,19 @@ pipeline {
                     sh """
                     flutter pub get
                     cd android
-                    fastlane buildDevApk
+                    fastlane firebaseDistribute env:dev buildName:${env.BASE_VERSION} buildNumber:${env.BUILD_NUM}
                     """
                     echo "Yahoo! App build success!"
                 }
+            }
+        }
+
+        stage('Run on jenkins branch only'){
+            when{
+                expression { env.GIT_BRANCH == 'origin/test/jenkins' || env.GIT_BRANCH == 'test/jenkins' }
+            }
+            steps{
+                echo "This is jenkins branch"
             }
         }
 
