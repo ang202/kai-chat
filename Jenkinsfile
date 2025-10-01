@@ -133,7 +133,7 @@ pipeline {
         stage('Upload to MobSF') {
             steps {
                 script {
-                    def uploadResp = sh(
+                    sh(
                         script: """curl -s -X POST "${MOBSF_URL}/api/v1/upload" \
                                   -H "Authorization: ${MOBSF_API_KEY}" \
                                   -F "file=@${APP_PATH}" """,
@@ -151,7 +151,8 @@ pipeline {
                     sh """curl -s -X POST "${MOBSF_URL}/api/v1/scan" \
                         -H "Authorization: ${MOBSF_API_KEY}" \
                         -d "scan_type=apk" \
-                        -d "hash=${APP_HASH}" """
+                        -d "hash=${APP_HASH}" \
+                        -o scan_report.json"""
                     echo "Scan completed"
                 }
             }
@@ -159,7 +160,7 @@ pipeline {
         stage('Fetch JSON Report') {
             steps {
                 script {
-                    def reportResp = sh(
+                    sh(
                         script: """curl -s -X POST "${MOBSF_URL}/api/v1/report_json" \
                                   -H "Authorization: ${MOBSF_API_KEY}" \
                                   -d "hash=${APP_HASH}" \
