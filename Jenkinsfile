@@ -133,7 +133,7 @@ pipeline {
         stage('Upload to MobSF') {
             steps {
                 script {
-                    sh(
+                    def uploadResp = sh(
                         script: """curl -s -X POST "${MOBSF_URL}/api/v1/upload" \
                                   -H "Authorization: ${MOBSF_API_KEY}" \
                                   -F "file=@${APP_PATH}" """,
