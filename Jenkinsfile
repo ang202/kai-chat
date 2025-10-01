@@ -168,10 +168,6 @@ pipeline {
                     )
                     def reportText = readFile 'output.json'
                     def report = readJSON text: reportText
-                    // Check for critical vulnerabilities
-                    def criticalIssues = report.issues.findAll {
-                        it.severity == 'Critical'
-                    }
                     def score = report.score ?: report.security_score ?: 100
                     echo "MobSF Score: ${score}"
                     // Look for critical issues
