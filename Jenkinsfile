@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         PATH = "/opt/homebrew/bin:$PATH" // Add Fastlane path to the environment
-        MOBSF_URL = "http://192.168.88.91:8000"   // your MobSF server
+        MOBSF_URL = "http://192.168.88.23:8000"   // your MobSF server
         MOBSF_API_KEY = "5514597f74ad8e25dc7fa9cc4544688f5eb1218c388a012c7c5f111bbd2ed386" // stored in Jenkins credentials
         APP_PATH = "build/app/outputs/flutter-apk/app.apk" // adjust path
     }
@@ -136,10 +136,13 @@ pipeline {
                     def uploadResp = sh(
                         script: """curl -s -X POST "${MOBSF_URL}/api/v1/upload" \
                                   -H "Authorization: ${MOBSF_API_KEY}" \
-                                  -F "file=@${APP_PATH}" """,
+                                  -F "file=@${APP_PATH}" \
+                                  -o result.json""",
                         returnStdout: true
                     )
-                    def uploadJson = readJSON text: uploadResp
+                    def resultText = readFile 'result.json'
+                    def result = readJSON text: resultText
+                    def uploadJson = readJSON text: result
                     env.APP_HASH = uploadJson.hash
                     echo "Uploaded app, hash: ${env.APP_HASH}"
                 }
@@ -163,12 +166,12 @@ pipeline {
                         script: """curl -s -X POST "${MOBSF_URL}/api/v1/report_json" \
                                   -H "Authorization: ${MOBSF_API_KEY}" \
                                   -d "hash=${APP_HASH}" \
-                                  -o output.json""",
+                                  -o report.json""",
                         returnStdout: true
                     )
-                    def reportText = readFile 'output.json'
+                    def reportText = readFile 'report.json'
                     def report = readJSON text: reportText
-                    def score = report.score ?: report.security_score ?: 100
+                    def score = report.appsec.security_score ?: 0
                     echo "MobSF Score: ${score}"
                     // Look for critical issues
                     def criticalIssues = []
