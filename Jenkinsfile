@@ -1,15 +1,12 @@
 pipeline {
     agent any
-    
     environment {
         PATH = "/opt/homebrew/bin:$PATH" // Add Fastlane path to the environment
         MOBSF_URL = "http://192.168.88.91:8000"   // your MobSF server
         MOBSF_API_KEY = "5514597f74ad8e25dc7fa9cc4544688f5eb1218c388a012c7c5f111bbd2ed386" // stored in Jenkins credentials
         APP_PATH = "build/app/outputs/flutter-apk/app.apk" // adjust path
     }
-    
     stages {
-
         stage('Get Git Tag') {
             steps {
                 script {
@@ -18,8 +15,7 @@ pipeline {
                 }
             }
         }
-        
-        stage('Get Git Branch') { 
+        stage('Get Git Branch') {
             steps {
                 script {
                     // Print the Git branch for debugging
@@ -27,8 +23,7 @@ pipeline {
                 }
             }
         }
-        
-        stage('Setup Files') { 
+        stage('Setup Files') {
             steps {
                 script {
                     // Copy keystore and service account files
@@ -38,13 +33,11 @@ pipeline {
                         cp \$KEYSTORE_FILE android/upload-keystore.jks
                         """
                     }
-
                     withCredentials([file(credentialsId: 'kai-chat-service-account', variable: 'SERVICE_ACCOUNT_FILE')]) {
                         sh """
                         cp \$SERVICE_ACCOUNT_FILE fastlane-supply.json
                         """
                     }
-
                     // Create environment files and key properties file
                     sh """
                     touch .env.dev
@@ -57,7 +50,6 @@ pipeline {
                     keyAlias=upload
                     storeFile=../upload-keystore.jks' > android/key.properties
                     """
-                    
                     // Append to .env files
                     withCredentials([string(credentialsId: 'kai-chat-env', variable: 'ENV_SECRET')]) {
                         sh """
@@ -69,7 +61,6 @@ pipeline {
                 }
             }
         }
-
         stage('Start setup version') {
             when {
                 expression {
@@ -80,31 +71,27 @@ pipeline {
             steps {
                 script {
                     def tag = env.TAG
-
                     echo "Raw tag: ${tag}"
-
                     // Regex: 1.0.0-dev.1 → groups: (1.0.0) (dev) (1)
-                    def pattern = ~/(\d+\.\d+\.\d+)-(\w+)\.(\d+)/
-
+                    def pattern = ~ /(\d+\.\d+\.\d+)-(\w+)\.(\d+)/
                     def matcher = pattern.matcher(tag)
                     if (!matcher.matches()) {
                         error "Tag format invalid: ${tag}"
                     }
-
                     def baseVersion = matcher[0][1] // 1.0.0
                     def environment = matcher[0][2] // dev
                     def buildNum = matcher[0][3] // 1
-
                     env.BASE_VERSION = baseVersion
                     env.ENVIRONMENT = environment
                     env.BUILD_NUM = buildNum
                 }
             }
         }
-        
         stage('Start build tag app') {
             when {
-                expression { env.BASE_VERSION && env.ENVIRONMENT && env.BUILD_NUM}
+                expression {
+                    env.BASE_VERSION && env.ENVIRONMENT && env.BUILD_NUM
+                }
             }
             steps {
                 echo "Current Git Tag: ${env.GIT_BRANCH}"
@@ -119,7 +106,6 @@ pipeline {
                 }
             }
         }
-
         stage('Start build normal app') {
             steps {
                 echo "Current Git Tag: ${env.GIT_BRANCH}"
@@ -134,16 +120,16 @@ pipeline {
                 }
             }
         }
-
-        stage('Run on jenkins branch only'){
-            when{
-                expression { env.GIT_BRANCH == 'origin/test/jenkins' || env.GIT_BRANCH == 'test/jenkins' }
+        stage('Run on jenkins branch only') {
+            when {
+                expression {
+                    env.GIT_BRANCH == 'origin/test/jenkins' || env.GIT_BRANCH == 'test/jenkins'
+                }
             }
-            steps{
+            steps {
                 echo "This is jenkins branch"
             }
         }
-
         stage('Upload to MobSF') {
             steps {
                 script {
@@ -159,7 +145,6 @@ pipeline {
                 }
             }
         }
-
         stage('Scan App') {
             steps {
                 script {
@@ -171,23 +156,35 @@ pipeline {
                 }
             }
         }
-
         stage('Fetch JSON Report') {
             steps {
                 script {
                     def reportResp = sh(
                         script: """curl -s -X POST "${MOBSF_URL}/api/v1/report_json" \
                                   -H "Authorization: ${MOBSF_API_KEY}" \
-                                  -d "hash=${APP_HASH}" """,
+                                  -d "hash=${APP_HASH}" \
+                                  -o output.json""",
                         returnStdout: true
                     )
-                    def report = readJSON text: reportResp
-                    echo "Fetched JSON report ${report}"
+                    def reportText = readFile 'output.json'
+                    def report = readJSON text: reportText
                     // Check for critical vulnerabilities
-                    def criticalIssues = report.issues.findAll { it.severity == 'Critical' }
-                    if (criticalIssues.size() > 0) {
+                    def criticalIssues = report.issues.findAll {
+                        it.severity == 'Critical'
+                    }
+                    def score = report.score ?: report.security_score ?: 100
+                    echo "MobSF Score: ${score}"
+                    // Look for critical issues
+                    def criticalIssues = []
+                    if (report.issues) {
+                        criticalIssues = report.issues.findAll {
+                            it.severity?.toLowerCase() == 'critical'
+                        }
+                    }
+                    if (score < 40 || criticalIssues.size() > 0) {
                         echo "Critical vulnerabilities found! Failing the build..."
                         error("Build blocked due to critical security issues in MobSF scan")
+                        // Fail the build & prevent push to Play Store or firebase
                     } else {
                         echo "No critical vulnerabilities found. Safe to proceed."
                     }
@@ -196,11 +193,10 @@ pipeline {
         }
         // Add on more build steps eg:test
     }
-    
     post {
         always {
             echo 'Pipeline completed.'
-            script{
+            script {
                 cleanWs()   // Clean workspace after build
             }
         }
