@@ -136,13 +136,10 @@ pipeline {
                     def uploadResp = sh(
                         script: """curl -s -X POST "${MOBSF_URL}/api/v1/upload" \
                                   -H "Authorization: ${MOBSF_API_KEY}" \
-                                  -F "file=@${APP_PATH}" \
-                                  -o result.json""",
+                                  -F "file=@${APP_PATH}" """,
                         returnStdout: true
                     )
-                    def resultText = readFile 'result.json'
-                    def result = readJSON text: resultText
-                    def uploadJson = readJSON text: result
+                    def uploadJson = readJSON text: uploadResp
                     env.APP_HASH = uploadJson.hash
                     echo "Uploaded app, hash: ${env.APP_HASH}"
                 }
