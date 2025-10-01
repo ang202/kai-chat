@@ -12,6 +12,7 @@ pipeline {
 
         stage('Get Git Tag') {
             steps {
+                cleanWs()
                 script {
                     env.TAG = sh(script: "git describe --tags --exact-match || true", returnStdout: true).trim()
                     echo "Resolved TAG: ${env.TAG}"
